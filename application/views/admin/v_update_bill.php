@@ -114,10 +114,24 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Số lượng</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                          <input type="number" name="quantity" value="<?php echo $bill[0]['quantity']?>" class="form-control"  >
                                     </div>
-
+                                    <div class="col-sm-2">
+                                        <select id="decalpriceform-unit" class="form-control" name="unit" aria-required="true">
+                                        <?php
+                                        if(!$unit) echo "<option value='0'>Empty</option>";
+                                        else{
+                                            foreach ($unit as $row) {
+                                                if($bill[0]['unit']==$row['id']){
+                                                    echo "<option selected value=".$row['id'].">".$row['name']."</option>";
+                                                }else echo "<option value=".$row['id'].">".$row['name']."</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                    
+                                    </div>
                                 </div>
                                 
                                  <div class="form-group">

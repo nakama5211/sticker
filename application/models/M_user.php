@@ -17,4 +17,11 @@ class M_user extends CI_Model
         $query = $this->db->get();
         return $query->first_row('array');
     }
+    function load_data($match){
+        $this->db->select('id,username,group')
+            ->from('users')
+            ->where($match);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

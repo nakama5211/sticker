@@ -21,4 +21,9 @@ class M_cost extends CI_Model
         $this->db->where('id',$id)
             ->update('cost',$data);
     }
+
+    function extra_update($match,$data){
+        $this->db->where($match)
+            ->update('cost',$data);
+    }
 }

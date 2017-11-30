@@ -145,12 +145,13 @@ textarea {
 }
 
 button {
+			text-transform: none;
 				overflow: visible
 }
 
-button,
 select {
-				text-transform: none
+				text-transform: none;
+				    height: 30px;
 }
 
 button,
@@ -1404,7 +1405,10 @@ select,
 textarea {
 				font-family: inherit;
 				font-size: inherit;
-				line-height: inherit
+				line-height: inherit;
+				border-radius: 5px;
+    width: auto;
+    margin-right: 1px;
 }
 
 a {
@@ -2817,7 +2821,7 @@ th {
 .table {
 				width: 100%;
 				max-width: 100%;
-				margin-bottom: 20px
+				margin-bottom: 0px
 }
 
 .table>tbody>tr>td,
@@ -4604,7 +4608,8 @@ tbody.collapse.in {
 .input-group {
 				position: relative;
 				display: table;
-				border-collapse: separate
+				border-collapse: separate;
+				margin: 6px;
 }
 
 .input-group[class*=col-] {
@@ -5243,7 +5248,7 @@ textarea.input-group-sm>.input-group-btn>.btn {
 								float: left
 				}
 				.navbar-nav>li>a {
-								padding-top: 15px;
+								padding-top: 10px;
 								padding-bottom: 15px
 				}
 }

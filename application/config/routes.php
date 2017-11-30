@@ -52,3 +52,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['editProject/(:any)'] = 'admin/Admin/pageEditProject/$1';
+$route['updateProject'] = 'admin/Admin/updateProject';

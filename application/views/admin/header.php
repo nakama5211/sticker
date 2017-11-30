@@ -69,9 +69,23 @@
           <!-- Sidebar Menu-->
           <ul class="sidebar-menu">
             <?php if(isset($category)){
-              foreach ($category as $key => $value){?>
-                <li class="<?php echo isset($value['class']) ? $value['class'] : ''; ?>"><a href="<?php echo base_url().'admin/'.$value['link']?>"><i class="fa fa-dashboard"></i><span><?php echo $value['name'];?></span></a></li>
-            <?php }}?>
+              foreach ($category as $key => $value){
+                if($key=='revenue'||$key=='resource'){
+                      ?>
+                      <li class="treeview <?php echo isset($active[$key][0]) ? $active[$key][0] : ''; ?>"><a href="#"><i class="<?php echo $value['icon']?>"></i><span><?php echo $value['name']?></span><i class="fa fa-angle-right"></i></a>
+                        <ul class="treeview-menu">
+                          <?php 
+                            foreach ($value['content'] as $k => $v) {?>
+                              <li><a href="<?php echo base_url().'admin/'.$v['link']?>"><i class="<?php echo isset($active[$key][$k]) ? $active[$key][$k] : 'fa fa-circle'; ?>"></i> <?php echo $v['name']?></a></li>
+                            <?php }
+                           ?>
+                        </ul>
+                      </li>
+                    <?php 
+                }else{
+                ?>
+                <li class="<?php echo isset($active[$key]) ? $active[$key] : ''; ?>"><a href="<?php echo base_url().'admin/'.$value['link']?>"><i class="<?php echo $value['icon'];?>"></i><span><?php echo $value['name'];?></span></a></li>
+            <?php }}}?>
           </ul>
         </section>
       </aside>

@@ -162,3 +162,7 @@ $(function () {
         updateDisplay();
     });
 });
+//Pretty Photo
+	$("a[rel^='prettyPhoto']").prettyPhoto({
+		social_tools: false
+	});	

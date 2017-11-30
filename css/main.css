@@ -15526,4 +15526,131 @@ be a descendant of the grid when it is being dragged.
 .input-group-addon.beautiful span{
     font-size: 20px;
 }
-
+.border-radius{
+  border-radius: 10px;
+  border: 1px solid #d2d0c8;
+}
+.col-data-table-0-1{
+  min-width: 10px;
+}
+.col-data-table-0-2{
+  min-width: 20px;
+}
+.col-data-table-0-3{
+  min-width: 30px;
+}
+.col-data-table-0-4{
+  min-width: 40px;
+}
+.col-data-table-0-5{
+  min-width: 50px;
+}
+.col-data-table-0-6{
+  min-width: 60px;
+}
+.col-data-table-0-7{
+  min-width: 70px;
+}
+.col-data-table-0-8{
+  min-width: 80px;
+}
+.col-data-table-0-9{
+  min-width: 90px;
+}
+.col-data-table-1{
+  min-width: 100px;
+}
+.col-data-table-1-1{
+  min-width: 110px;
+}
+.col-data-table-1-2{
+  min-width: 120px;
+}
+.col-data-table-1-3{
+  min-width: 130px;
+}
+.col-data-table-1-4{
+  min-width: 140px;
+}
+.col-data-table-1-5{
+  min-width: 150px;
+}
+.col-data-table-1-6{
+  min-width: 160px;
+}
+.col-data-table-1-7{
+  min-width: 170px;
+}
+.col-data-table-1-8{
+  min-width: 180px;
+}
+.col-data-table-1-9{
+  min-width: 190px;
+}
+.col-data-table-2{
+  min-width: 200px;
+}
+.col-data-table-2-1{
+  min-width: 210px;
+}
+.col-data-table-2-2{
+  min-width: 220px;
+}
+.col-data-table-2-3{
+  min-width: 230px;
+}
+.col-data-table-2-4{
+  min-width: 240px;
+}
+.col-data-table-2-5{
+  min-width: 250px;
+}
+.col-data-table-2-6{
+  min-width: 260px;
+}
+.col-data-table-2-7{
+  min-width: 270px;
+}
+.col-data-table-2-8{
+  min-width: 280px;
+}
+.col-data-table-2-9{
+  min-width: 290px;
+}
+.col-data-table-3{
+  min-width: 300px;
+}
+.col-data-table-3-5{
+  min-width: 350px;
+}
+.col-data-table-4{
+  min-width: 400px;
+}
+.col-data-table-4-5{
+  min-width: 450px;
+}
+.col-data-table-5{
+  min-width: 500px;
+}
+.col-data-table-max-width-0-5{
+  min-width: 50px;
+}
+/* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
+ul{
+  list-style-type: none;
+}
+.social-icons { position: fixed; right: 20px; top: 60px; }
+.btn-social { cursor: pointer; width: 50px; height: 50px; border-radius: 50px; }
+.social-icons .navbar-nav li { position: absolute; right: 40px; z-index: -9999; transition: .5s all; }
+.social-icons .navbar-nav.show li:nth-child(1){right: 100px}
+.social-icons .navbar-nav.show li:nth-child(2){right: 160px}
+.social-icons .navbar-nav.show li:nth-child(3){right: 220px;}
+.navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 15px;
+}

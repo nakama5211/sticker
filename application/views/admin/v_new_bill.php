@@ -64,7 +64,6 @@
                                     <div class="col-sm-6">
                                          <input type="text" name="note" value="" class="form-control"  >
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Loại Decal</label>
@@ -74,9 +73,9 @@
                                         <?php
                                         if(!$typedecal) echo "<option value='0'>Empty</option>";
                                         else{
-                                            foreach ($typedecal as $row) {
-                                                echo "<option value=".$row['id'].">".$row['name']."</option>";
-                                            }
+                                          foreach ($typedecal as $row) {
+                                            echo "<option value=".$row['id'].">".$row['name']."</option>";
+                                          }
                                         }
                                         ?>
                                         </select>
@@ -85,20 +84,18 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Cán màng</label>
                                     <div class="col-sm-6">
-                                        <select id="decalpriceform-isextrusion" class="form-control" name="id_extrusion" required="" aria-required="true">
+                                      <select id="decalpriceform-isextrusion" class="form-control" name="id_extrusion" required="" aria-required="true">
                                         <option selected hidden disabled value="">Chọn cán màng</option>
                                         <?php
                                         if(!$extrusion) echo "<option value='0'>Empty</option>";
                                         else{
-                                            foreach ($extrusion as $row) {
-                                                echo "<option value=".$row['id'].">".$row['name']."</option>";
-                                            }
+                                          foreach ($extrusion as $row) {
+                                            echo "<option value=".$row['id'].">".$row['name']."</option>";
+                                          }
                                         }
                                         ?>
-                                    </select>
-                                    
+                                      </select>
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Kích thước</label>
@@ -108,16 +105,26 @@
                                     <div class="col-sm-3">
                                          <input type="number" required="" min="3" max="280" value="" class="form-control"  name="height">
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Số lượng</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                          <input type="number" required="" name="quantity" value="" class="form-control"  >
                                     </div>
-
+                                    <div class="col-sm-2">
+                                      <select id="decalpriceform-unit" class="form-control" name="unit" required="" aria-required="true">
+                                        <option selected hidden disabled value="">Đơn vị</option>
+                                        <?php
+                                        if(!$unit) echo "<option value='0'>Empty</option>";
+                                        else{
+                                          foreach ($unit as $row) {
+                                            echo "<option value=".$row['id'].">".$row['name']."</option>";
+                                          }
+                                        }
+                                        ?>
+                                      </select>
+                                    </div>
                                 </div>
-                                
                                  <div class="form-group">
                                     <label class=" col-sm-3 control-label ">File thiết kế</label>
                                     <div class="col-sm-6">

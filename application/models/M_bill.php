@@ -7,31 +7,99 @@ class M_bill extends CI_Model
         parent::__construct();
     }
     function load_all_bill(){
-        $this->db->select('bill.*,customer.name as customer,customer.email as email,customer.phone as phone,customer.address as address,customer.note as note,typedecal.name as typedecal,typedecal.price as typedecal_price,extrusion.price as extrusion_price,extrusion.name as extrusion')
+        $this->db->select('
+            bill.*,
+
+            customer.name as customer,
+            customer.email as email,
+            customer.phone as phone,
+            customer.address as address,
+
+            typedecal.name as typedecal,
+            typedecal.price as typedecal_price,
+
+            extrusion.price as extrusion_price,
+            extrusion.name as extrusion
+
+            unit.name as unit_name
+            ')
         		->from('bill')
+                ->join('unit','unit.id = bill.unit')
                 ->join('customer','bill.id_customer = customer.id')
         		->join('typedecal', 'bill.id_typedecal = typedecal.id')
         		->join('extrusion', 'bill.id_extrusion = extrusion.id')
-                ->where('hidden',0)
-        		->order_by('bill.created_at');
+                ->where('bill.hidden',0)
+        		->order_by('bill.created_at','desc');
         $query = $this->db->get();
         return $query->result_array();
     }
 
     function load_bill($match){
-        $this->db->select('bill.*,customer.name as customer,customer.email as email,customer.phone as phone,customer.address as address,customer.note as note,typedecal.name as typedecal,typedecal.price as typedecal_price,extrusion.price as extrusion_price,extrusion.name as extrusion')
+        $this->db->select('
+            bill.*,
+
+            customer.name as customer,
+            customer.email as email,
+            customer.phone as phone,
+            customer.address as address,
+
+            typedecal.name as typedecal,
+            typedecal.price as typedecal_price,
+
+            extrusion.price as extrusion_price,
+            extrusion.name as extrusion,
+
+            unit.name as unit_name,
+
+            status.name as status_name,
+            ')
                 ->from('bill')
+                ->join('status','status.id = bill.status')
+                ->join('unit','unit.id = bill.unit')
                 ->join('customer','bill.id_customer = customer.id')
                 ->join('typedecal', 'bill.id_typedecal = typedecal.id')
                 ->join('extrusion', 'bill.id_extrusion = extrusion.id')
                 ->where($match)
-                ->order_by('bill.created_at');
+                ->order_by('bill.created_at','desc');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function load_my_task_bill($match){
+        $this->db->select('
+            bill.*,
+
+            customer.name as customer,
+            customer.email as email,
+            customer.phone as phone,
+            customer.address as address,
+
+            typedecal.name as typedecal,
+            typedecal.price as typedecal_price,
+
+            extrusion.price as extrusion_price,
+            extrusion.name as extrusion,
+
+            unit.name as unit_name,
+
+            status.name as status_name,
+            ')
+                ->from('bill')
+                ->join('status','status.id = bill.status')
+                ->join('unit','unit.id = bill.unit')
+                ->join('project','project.id_bill = bill.id')
+                ->join('customer','bill.id_customer = customer.id')
+                ->join('typedecal', 'bill.id_typedecal = typedecal.id')
+                ->join('extrusion', 'bill.id_extrusion = extrusion.id')
+                ->join('task','task.id_project = project.id','left')
+                ->where($match)
+                ->order_by('bill.created_at','desc');
         $query = $this->db->get();
         return $query->result_array();
     }
 
     function get_bill($id){
-    	$this->db->select('bill.*,customer.name as customer,customer.email as email,customer.phone as phone,customer.address as address,customer.note as note,typedecal.id as typedecal,typedecal.price as typedecal_price,extrusion.price as extrusion_price,extrusion.id as extrusion,extrusion.name as extrusion_name,typedecal.name as typedecal_name')
+    	$this->db->select('bill.*,customer.name as customer,customer.email as email,customer.phone as phone,customer.address as address,typedecal.id as typedecal,typedecal.price as typedecal_price,extrusion.price as extrusion_price,extrusion.id as extrusion,extrusion.name as extrusion_name,typedecal.name as typedecal_name')
         		->from('bill')
                 ->join('customer','bill.id_customer = customer.id')
         		->join('typedecal', 'bill.id_typedecal = typedecal.id')
@@ -57,6 +125,14 @@ class M_bill extends CI_Model
                 ->from('bill')
                 ->order_by('created_at','DESC')
                 ->limit(5);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function get_file($id){
+        $this->db->select('file')
+                ->where('id',$id)
+                ->from('bill');
         $query = $this->db->get();
         return $query->result_array();
     }

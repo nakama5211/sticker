@@ -24,4 +24,17 @@ class M_user extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function select_user($match)
+    {
+        $this->db->select()
+            ->from('users')
+            ->where($match);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    function update_user($id,$data)
+    {
+        $this->db->where('id',$id)->update('users', $data);
+    }
 }

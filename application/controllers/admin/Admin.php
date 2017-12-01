@@ -125,6 +125,11 @@ class Admin extends CI_Controller{
 		            		),
 		            		'icon'=>'fa fa-table'
 		            	),
+		            	'user'=>array(
+		            		'name'=>'Quản lý User',
+		            		'link'=>'admin/view_admin/user',
+		            		'icon'=>'fa fa-user'
+		            	),
 		            ); 
 					switch ($view) {
 						case 'bill':
@@ -283,6 +288,17 @@ class Admin extends CI_Controller{
 							$category['active']['resource'][$view] = 'fa fa-circle-o';
 							$data['status'] = $this->M_resource->load_data($match,'status');
 							$this->_data['html_body'] = $this->load->view('admin/data_table/v_data_status',$data, TRUE);
+							break;
+						case 'user':
+							$match = array(
+								'users.hidden'=>0,
+							);
+							$category['active'][$view] = 'active';
+							$data['department'] = $this->M_department->load_all_department();
+		            		$data['users'] = $this->M_user->select_user($match);
+		            		// $data['typeproject'] = $this->M_data->load_typeProject();
+		            		// $data['classproject'] = $this->M_data->load_class();
+							$this->_data['html_body'] = $this->load->view('admin/v_user',$data, TRUE);
 							break;
 						default:
 							

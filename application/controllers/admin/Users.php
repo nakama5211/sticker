@@ -24,6 +24,7 @@ class Users extends CI_Controller
             else //when user exist
             {
                 $this->session->set_userdata('user_id', $user['id']);
+                $this->session->set_userdata('avatar',$user['avatar']);
                 $this->session->set_userdata('username', $user['username']);
                 $this->session->set_userdata('group',$user['group']);
                 redirect(base_url().'admin/admin/view_admin/bill');

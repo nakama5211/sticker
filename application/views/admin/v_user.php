@@ -46,7 +46,7 @@
                   	?>
                   	<tr id="row_<?php echo $row['id']?>">
                       <td></td>
-                      <td id="avatar_<?php echo $row['id']?>"><?php echo $row['avatar']?></td>
+                      <td><img src="<?php echo $row['avatar']?>" style="width: 100px;height: 100px"></td>
                       <td id="name_<?php echo $row['id']?>"><?php echo $row['username']?></td>
                       <?php foreach ($department as $depar) {
                               if($depar['id'] == $row['group'] ) { ?>
@@ -198,7 +198,7 @@ $('#add').on('click',function(){
         success:function(data) { 
           var row = [];
               row.push('<td></td>');
-              row.push('<td>'+avatar+'</td>');
+              row.push('<td><img src="'+avatar+'" style="width: 100px;height: 100px"></td>');
               row.push('<td>'+username+'</td>');
               row.push('<td>'+group+'</td>');
               row.push('<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" data-toggle="modal" data-target="#editUser" data-id='+data+'></button><button class="btn btn-danger btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow('+data+')"></button>');
@@ -244,7 +244,7 @@ function editFormUser(){
         $('#sampleTable').dataTable().fnDeleteRow($('#row_'+id));
           var row = [];
           row.push('<td></td>');
-          row.push('<td>'+avatar+'</td>');
+          row.push('<td><img src="'+avatar+'" style="width: 100px;height: 100px"></td>');
           row.push('<td>'+username+'</td>');
           row.push('<td>'+group+'</td>');
           row.push('<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" data-toggle="modal" data-target="#editUser" data-id='+id+'></button><button class="btn btn-danger btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow('+id+')"></button>');

@@ -178,7 +178,8 @@ class Task extends CI_Controller{
 		$list_task = $this->M_task->get_task_by_match($match);
 		$check_list = [];
 		foreach ($list_task as $key => $value) {
-			$check_list[$value['progress']] = $value['username'];
+			$check_list[$value['progress']] = $value['username']; 
+			if($value['status']=='p405') $check_list['p405'] = 'Hoàn tất.';
 		}
 		$progress = $this->M_status->load_status_by_type('progress');
 		$data['progress'] = '';
@@ -198,7 +199,22 @@ class Task extends CI_Controller{
                           </div>
             ';
         }
-
+        if(isset($check_list['p405'])){
+        	$data['progress'].= '
+                          <div class="[ form-group ] disabled">
+                              <input type="checkbox" name="fancy-checkbox-default" id="fancy-checkbox-default" checked="" disabled="" autocomplete="off"/>
+                              <div class="[ btn-group ]" style="width: 100%">
+                                  <label for="fancy-checkbox-default" class="[ btn btn-default ]">
+                                      <span class="[ glyphicon glyphicon-ok ]"></span>
+                                      <span> </span>
+                                  </label>
+                                  <label for="fancy-checkbox-default" class="[ btn btn-default active ]" style="width: 80%">
+                                      '.$check_list['p405'].'
+                                  </label>
+                              </div>
+                          </div>
+            ';
+        }
         echo(json_encode($data));
 	}
 }

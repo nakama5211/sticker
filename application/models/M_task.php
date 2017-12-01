@@ -59,10 +59,13 @@ class M_task extends CI_Model
             users.username,
 
             department.progress,
+
+            project.status,
         ')
         ->from('task')
-        ->join('users','users.id = task.id_user')
-        ->join('department','department.id = users.group')
+        ->join('users','users.id = task.id_user','left')
+        ->join('department','department.id = users.group','left')
+        ->join('project','project.id = task.id_project','left')
         ->where($match);
         $query = $this->db->get();
         return $query->result_array();

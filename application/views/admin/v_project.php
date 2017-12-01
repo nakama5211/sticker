@@ -151,11 +151,17 @@
                         </a>
                         <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="updateStatus('<?php echo $row['id'] ?>')">Hoàn tất
                         </button>
+                        <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
+                        </button>
                   	  </td>
-                    <?php }else echo '<td></td>'; ?>
+                    <?php }else{ echo ''; ?>
+                      <td>
+                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
+                        </button>
+                      </td>
                     </tr>
                   	<?php
-                  	} ?>
+                  	}} ?>
                   </tbody>
                 </table>
               </div>
@@ -292,6 +298,35 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="project-progress">
+          <div class="modal-dialog">
+           <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Tiến độ của dự án:</b></h4>
+              </div>
+              <form method="post" id="choose-form">
+              <div class="modal-body">
+                 <div class="container-fluid">
+                    <div class="container">
+                      <div class="[ col-xs-12 col-sm-6 ]" id="progress-view">
+                          
+                      </div>
+                  </div>
+                 </div>
+              </div>
+              <div class="modal-footer">
+                 <div class="form-group">
+                    <!-- <button type="button" class="btn btn-sm btn-info" onclick="createProject()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button> -->
+                 </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
 <?php } ?>
 <script type="text/javascript">
 function onCreateTask(id=''){
@@ -413,6 +448,22 @@ function subEditForm(){
     }
   });
 }
+
+function viewProgress(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/task/get_progress_by_task',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_project:id
+    },
+    success:function(data){
+      $('#progress-view').html(data.progress);
+      $('#project-progress').modal('show');
+    }
+  });
+}
+
 $(document).ready(function() {
   $('#dropbtn').click(function(event) {
     var status = $('#statusDrop').val();

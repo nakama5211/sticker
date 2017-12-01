@@ -53,4 +53,18 @@ class M_task extends CI_Model
         $this->db->where('id',$id)
             ->update('task',$data);
     }
+
+    function get_task_by_match($match){
+        $this->db->select('
+            users.username,
+
+            department.progress,
+        ')
+        ->from('task')
+        ->join('users','users.id = task.id_user')
+        ->join('department','department.id = users.group')
+        ->where($match);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

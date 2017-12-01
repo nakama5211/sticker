@@ -167,4 +167,38 @@ class Task extends CI_Controller{
 		$data['success']="Hủy task thành công!";
 		echo json_encode($data);
 	}
+
+	function get_progress_by_task(){
+		$id = $this->input->post('id_project');
+		$match = array(
+			'task.id_project'=>$id,
+			'task.status'=>'t003',
+			'task.hidden'=>0
+		);
+		$list_task = $this->M_task->get_task_by_match($match);
+		$check_list = [];
+		foreach ($list_task as $key => $value) {
+			$check_list[$value['progress']] = $value['username'];
+		}
+		$progress = $this->M_status->load_status_by_type('progress');
+		$data['progress'] = '';
+        foreach ($progress as $key => $value) {
+        	$data['progress'].= '
+                          <div class="[ form-group ] disabled">
+                              <input type="checkbox" name="fancy-checkbox-default" id="fancy-checkbox-default" '.(isset($check_list[$value['id']])?'checked=""':'').' disabled="" autocomplete="off"/>
+                              <div class="[ btn-group ]" style="width: 100%">
+                                  <label for="fancy-checkbox-default" class="[ btn btn-'.$value['class'].' ]">
+                                      <span class="[ glyphicon glyphicon-ok ]"></span>
+                                      <span> </span>
+                                  </label>
+                                  <label for="fancy-checkbox-default" class="[ btn btn-default active ]" style="width: 80%">
+                                      '.$value['name'].' ('.(isset($check_list[$value['id']])?$check_list[$value['id']]:'').')
+                                  </label>
+                              </div>
+                          </div>
+            ';
+        }
+
+        echo(json_encode($data));
+	}
 }

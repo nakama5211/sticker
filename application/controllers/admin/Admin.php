@@ -174,6 +174,7 @@ class Admin extends CI_Controller{
 		            		$data['project'] = $this->M_project->load_project($match);
 		            		$data['typeproject'] = $this->M_data->load_typeProject();
 		            		$data['status'] = $this->M_status->load_status_by_type('project');
+		            		$data['progress'] = $this->M_status->load_status_by_type('progress');
 		            		$data['classproject'] = $this->M_data->load_class();
 							$this->_data['html_body'] = $this->load->view('admin/v_project',$data, TRUE);
 							break;

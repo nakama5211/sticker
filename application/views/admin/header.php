@@ -35,7 +35,7 @@
       <aside class="main-sidebar hidden-print">
         <section class="sidebar">
           <div class="user-panel">
-            <div class="pull-left image"><img class="img-circle" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="User Image"></div>
+            <div class="pull-left image"><img class="img-circle" src="<?php echo $this->session->userdata('avatar');?>" alt="User Image"></div>
             <div class="pull-left info">
               <?php if(!$this->session->userdata('user_id'))
                 echo "<div> NULL </div>";

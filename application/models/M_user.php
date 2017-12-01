@@ -10,7 +10,7 @@ class M_user extends CI_Model
     {
         $match = array(
             'username'=>$username,
-            'password' => sha1($password),
+            'password' => md5($password),
         );
         
         $this->db->select()->from('users')->where($match);

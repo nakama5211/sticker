@@ -111,7 +111,93 @@ else{
                     <hr>
                   </div>
                 </div>
-<!--main-container-part-->
+                <!--main-container-part-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <table class="stripe row-border order-column" cellspacing="0" width="100%" id="sampleTable">
+                  <thead>
+                    <tr class="text-center">
+                      <th></th>
+                      <th class="col-data-table-0-7">Mã dự án</th>
+                      <th class="col-data-table-0-7">Dự án</th>
+                      <th class="col-data-table-1-2">File thiết kế</th>
+                      <th class="col-data-table-1-1">Ngày nhận task</th>
+                      <th class="col-data-table-0-9">Ngày hoàn thành</th>
+                      <!-- <th class="col-data-table-1-8">Hạng mục công việc</th> -->
+                      <th class="col-data-table-1-2">Trạng thái task</th>
+                      
+                      <!-- <th class="col-data-table-1-2">File đính kèm</th> -->
+                      <!-- <th class="col-data-table-1-2">Người liên hệ</th> -->
+                      <th class="col-data-table-1-4">Thời hạn giao hàng</th>
+                      <th class="col-data-table-1">Doanh thu</th>
+                      <th class="col-data-table-1-2">Chi phí</th>
+                      <th class="col-data-table-1">Số lượng</th>
+                      <th class="col-data-table-0-5">Đơn vị</th>
+                      <th class="col-data-table-1-8">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($project as $row) {
+                      $donhang = json_decode($row['thongtin_donhang'],true);
+                      // var_dump($donhang['quantity']);
+                    ?>
+                    <tr id="row<?php echo $row['id']?>">
+                      <td></td>
+                      <td><?php echo $row['id']?></td>
+                      <td><?php echo $row['project_name']?></td>
+                      <td><?php echo "<a rel = 'prettyPhoto' href = '".base_url()."upload/".$row['file_thiet_ke']."'><img style='height: 50px; width: 50px;'src='".base_url()."upload/".$row['file_thiet_ke']."'></a>"?></td>
+                      <td><?php echo $row['get_at'];?></td>
+                      <td><?php echo $row['done_at']?></td>
+                      
+                      <td id="status_<?php echo $row['id']?>"><?php echo $row['status_name']?></td>
+                      
+                      
+                      <td><?php echo $row['dead_line']?></td>
+                      <td><?php echo number_format($row['tong_doanhthu'])." ₫"?></td>
+                      <td><?php echo number_format($row['tong_chiphi'])." ₫"?></td>
+                      <td><?php echo number_format($donhang['quantity'])?></td>
+                      <td><?php echo $donhang['unit']?></td>
+                      <?php 
+                      if($row['status'] != 'p405' && $this->session->userdata('group')==1){ 
+                      ?>
+                      <td id="button_<?php echo $row['id']?>">
+                        <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="onCreateTask('<?php echo $row['id'] ?>')">Phân công việc
+                        </button> 
+                        <button class="btn btn-primary btn-lg" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id'] ?>')">Quy cách in
+                        </button>
+                        <a class="btn btn-info btn-lg" style="border-radius: 10px;" href="<?php echo base_url().'editProject/'.$row['id'] ?>">Chỉnh sửa dự án
+                        </a>
+                        <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="updateStatus('<?php echo $row['id'] ?>')">Hoàn tất
+                        </button>
+                        <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
+                        </button>
+                      </td>
+                    <?php }elseif($this->session->userdata('group')==1){ echo ''; ?>
+                      <td>
+                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
+                        </button>
+                      </td>
+                    </tr>
+                    <?php
+                    }else{ ?>
+
+                    <td>
+                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="selectFile('<?php echo $row['id'] ?>')">Chốt file
+                        </button>
+                      </td>
+                      <?php 
+                    }
+
+
+                  } ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

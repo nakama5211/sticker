@@ -439,8 +439,9 @@ class Admin extends CI_Controller{
 							break;
 						case 'print':
 							$match = array(
-								'printer.hidden'=>0,
-								'printer.id_user'=>$this->session->userdata('user_id'),
+								'task.hidden'=>0,
+								'task.status!='=>'t001',
+								'task.id_user'=>$this->session->userdata('user_id'),
 							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
@@ -467,16 +468,6 @@ class Admin extends CI_Controller{
 		            		'link'=>'admin/view_admin/task',
 		            		'icon'=>'fa fa-object-group'
 		            	),
-		            	'bill'=> array(
-		            		'name'=>'Đơn hàng',
-		            		'link'=>'admin/view_admin/bill',
-		            		'icon'=>'fa fa-object-group'
-		            	),
-		            	'project'=> array(
-		            		'name'=>'Quản lý Dự án',
-		            		'link'=>'admin/view_admin/project',
-		            		'icon'=>'fa fa-archive'
-		            	),
 		            ); 
 					switch ($view) {
 						case 'task':
@@ -490,11 +481,18 @@ class Admin extends CI_Controller{
 								'task.status!='=>'t001',
 								'task.id_user'=>$this->session->userdata('user_id'),
 							);
+							$match['project'] = array(
+								'task.hidden'=>0,
+								'task.id_user'=>$this->session->userdata('user_id'),
+								'task.status!='=>'t004',
+								'task.status!='=>'t001',
+							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
 		            		$data['newtask'] = $this->M_task->load_data($match['newtask']);
 		            		$data['oldtask'] = $this->M_task->load_data($match['oldtask']);
-							$this->_data['html_body'] = $this->load->view('admin/v_task',$data, TRUE);
+		            		$data['project'] = $this->M_project->load_my_task_project_bill($match['project']);
+							$this->_data['html_body'] = $this->load->view('admin/v_task_design',$data, TRUE);
 							break;
 						case 'bill':
 							$match = array(
@@ -524,7 +522,7 @@ class Admin extends CI_Controller{
 							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
-		            		$data['bill'] = $this->M_project->load_my_task_project($match);
+		            		$data['project'] = $this->M_project->load_my_task_project($match);
 		            		$data['classproject'] = $this->M_data->load_class();
 							$this->_data['html_body'] = $this->load->view('admin/v_project',$data, TRUE);
 							break;
@@ -538,7 +536,7 @@ class Admin extends CI_Controller{
 					$this->_data['html_footer'] = $this->load->view('admin/footer', NULL, TRUE);
 					// Load view method_one_view        
 					$this->load->view('admin/master', $this->_data);
-					//var_dump($data['print']);
+					//var_dump($data['project']);
 					break;
 		        }
 		        default:{
@@ -1042,9 +1040,9 @@ class Admin extends CI_Controller{
         $data["image"] = '';
       	}
       	if($data['image']!=''){
-      		$file_req = array('file'=>$data['image']);
-      		$this->M_bill->update_bill($id,$file_req);
-      		$data['file_res'] = $this->M_bill->get_file($id);
+      		$file_req = array('file_thiet_ke'=>$data['image']);
+      		$this->M_project->update_row($id,$file_req);
+      		// $data['file_res'] = $this->M_bill->get_file($id);
       		$data['success'] = "Thành công!!";
       	}else{
       		$data['error'] = "Thất bại.";

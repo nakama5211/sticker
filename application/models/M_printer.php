@@ -29,7 +29,8 @@ class M_printer extends CI_Model
         	->join('bill','bill.id = project.id_bill','left')
         	->join('customer','customer.id = bill.id_customer','left')
             ->join('gia_cong','gia_cong.id = outsource','left')
-            ->join('users','users.id = id_user','left')
+            ->join('task','task.id_project = printer.id_project','left')
+            ->join('users','users.id = task.id_user')
             ->where($match)
         	->order_by('id','desc');
         $query = $this->db->get();
@@ -46,6 +47,10 @@ class M_printer extends CI_Model
     {
         $this->db->insert('printer', $data);
         return $this->db->insert_id();;
+    }
+    function extra_update($match,$data,$table){
+        $this->db->where($match)
+            ->update($table,$data);
     }
     function update($id,$data){
         $this->db->where('id',$id)

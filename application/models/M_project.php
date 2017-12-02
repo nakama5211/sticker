@@ -79,12 +79,43 @@ class M_project extends CI_Model
             status.name as status_name,
         ')
         ->from('project')
-        ->join('status','status.id = project.status')
-        ->join('typeproject','typeproject.id = id_typeproject')
-        ->join('bill','bill.id = id_bill')
-        ->join('customer','customer.id = bill.id_customer')
-        ->join('unit','unit.id = bill.unit')
+        ->join('status','status.id = project.status','left')
+        ->join('typeproject','typeproject.id = id_typeproject','left')
+        ->join('bill','bill.id = id_bill','left')
+        ->join('customer','customer.id = bill.id_customer','left')
+        ->join('unit','unit.id = bill.unit','left')
+        ->join('task','task.id_project = project.id','left')
+        ->where($match)
+        ->order_by('project.created_at','desc');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+     function load_my_task_project_bill($match){
+        $this->db->select('
+            project.*,
+
+            customer.name as customer,
+
+            typeproject.name as typeproject,
+
+            bill.quantity as qty,
+            bill.unit as unit,
+
+            unit.name as unit_name,
+
+            status.name as status_name,
+
+            task.get_at,
+            task.done_at,
+        ')
+        ->from('project')
+        ->join('typeproject','typeproject.id = id_typeproject','left')
+        ->join('bill','bill.id = id_bill','left')
+        ->join('customer','customer.id = bill.id_customer','left')
+        ->join('unit','unit.id = bill.unit','left')
         ->join('task','task.id_project = project.id')
+        ->join('status','status.id = task.status','left')
         ->where($match)
         ->order_by('project.created_at','desc');
         $query = $this->db->get();

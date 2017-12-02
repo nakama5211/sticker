@@ -102,9 +102,9 @@ class M_data extends CI_Model
         return $query->result_array();  
     }
 
-    function record_exists($record,$key,$table)
+    function record_exists($record,$table)
     {
-        $this->db->where($key,$record);
+        $this->db->where($record);
         $query = $this->db->get($table);
         if ($query->num_rows() > 0){
             return true;

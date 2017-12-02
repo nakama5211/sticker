@@ -44,13 +44,19 @@ class Task extends CI_Controller{
 				$project['status'] = 'p001';
 				break;
 		}
-		if(isset($table) && $this->M_data->record_exists($task['id_project'],'id_project',$table) && !$this->M_data->null_key(array('id_project'=>$task['id_project']),'id_user',$table)){
-			$data['exists'] = "Dự án này đã được phân công in";
+		$record = array(
+			'id_project'=>$task['id_project'],
+			'id_user'=>$task['id_user'],
+			'status!='=>'t004',
+			'hidden'=>'0'
+		);
+		if($this->M_data->record_exists($record,'task')){
+			$data['exists'] = "Dự án này đã được phân công";
 		}else{
 			if(isset($table)){
 				switch ($table) {
 					case 'printer':
-						if(!$this->M_data->record_exists($task['id_project'],'id_project',$table)){
+						if(!$this->M_data->record_exists(array('id_project'=>$task['id_project']),'task')){
 							$new_printer = array(
 		                    'id_project'=>$task['id_project'],
 			                );
@@ -93,7 +99,7 @@ class Task extends CI_Controller{
 				$data_printer = array(
 					'id_user'=>$this->session->userdata('user_id')
 				);
-				$this->M_printer->extra_update($match_printer,$data_printer);
+				$this->M_printer->extra_update($match_printer,$data_printer,'printer');
 				$project['status'] = 'p301';
 				break;
 			default:
@@ -216,5 +222,13 @@ class Task extends CI_Controller{
             ';
         }
         echo(json_encode($data));
+	}
+	function select_final_file(){
+		$id = $this->input->post('id');
+		$file_name = $this->input->post('file');
+      	$file_req = array('file_thiet_ke'=>$file_name);
+      	$this->M_project->update_row($id,$file_req);
+      	$data['success'] = "Thành công!!";
+      	echo(json_encode($data));
 	}
 }

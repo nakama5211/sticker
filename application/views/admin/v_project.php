@@ -141,7 +141,9 @@
                       <td><?php echo number_format($row['tong_chiphi'])." ₫"?></td>
                       <td><?php echo number_format($donhang['quantity'])?></td>
                       <td><?php echo $donhang['unit']?></td>
-                      <?php if($row['status'] != 'p405'){ ?>
+                      <?php 
+                      if($row['status'] != 'p405' && $this->session->userdata('group')==1){ 
+                      ?>
                       <td id="button_<?php echo $row['id']?>">
                         <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="onCreateTask('<?php echo $row['id'] ?>')">Phân công việc
                         </button> 
@@ -154,14 +156,24 @@
                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
                         </button>
                   	  </td>
-                    <?php }else{ echo ''; ?>
+                    <?php }elseif($this->session->userdata('group')==1){ echo ''; ?>
                       <td>
                          <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
                         </button>
                       </td>
                     </tr>
                   	<?php
-                  	}} ?>
+                  	}else{ ?>
+
+                    <td>
+                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="selectFile('<?php echo $row['id'] ?>')">Chốt file
+                        </button>
+                      </td>
+                      <?php 
+                    }
+
+
+                  } ?>
                   </tbody>
                 </table>
               </div>
@@ -327,6 +339,44 @@
           </div>
         </div>
     </div>
+    <div class="modal fade" id="select-file-modal">
+           <div class="modal-dialog">
+           <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Chọn file thiết kế:</b></h4>
+              </div>
+              <form method="post" id="file-select-form">
+              <div class="modal-body">
+                 <div class="container-fluid">
+                    <div class="row">
+                      <div class="form-group">
+                        <div><b>Chọn file thiết kế</b></div>
+                          <div class="input-group">
+                            <input type="text" class="form-control" name="" disabled="" id="f_in" value="">
+                            <div class="input-group-addon iga2">
+                               <label style="margin-bottom: 0px;" class="fa"><b>Browse...</b><input onchange="file_change(this,0);" type="file" id="f" name="file" style="display: none;"></label>
+                            </div>
+                          </div>
+                          <img src="" width="100%" height="auto" id="img0" style="margin-top: 10px;  display: none;" />
+                        <div class="help-block" id="error-select-file"></div>
+                      </div>
+                    </div>
+                 </div>
+                 <input type="hidden" name="id" id="cur-id-select-file">
+              </div>
+              <div class="modal-footer">
+                 <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-info" id="btn-select-file" disabled="" onclick="confirmSelectFile()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
+                 </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 <?php } ?>
 <script type="text/javascript">
 function onCreateTask(id=''){
@@ -463,7 +513,68 @@ function viewProgress(id){
     }
   });
 }
+function selectFile(id) {
+  document.getElementById("cur-id-select-file").value = id;
+  $('#error-select-file').html('');
+  $('#select-file-modal').modal('show');
+}
 
+function file_change(f,i){
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    $("#img0").show();
+    var img = document.getElementById("img"+i);
+    img.src = e.target.result;
+    img.style.display = "block-inline";
+  };
+  var ftype =f.files[0].type;
+  switch(ftype)
+  {
+    case 'image/png':
+    case 'image/gif':
+    case 'image/jpeg':
+    case 'image/pjpeg':
+      reader.readAsDataURL(f.files[0]);
+      $('#f_in').val(f.files[0].name);
+      $('#btn-select-file').removeAttr('disabled');
+      break;
+    default:
+      alert('Tập tin này không được hỗ trợ! Bạn chỉ được chọn file ảnh.');
+      $("#f").val(null);
+      $('#f_in').val(null);
+      $("#img0").hide();
+      $('#btn-select-file').attr('disabled','');
+  }
+}
+
+function confirmSelectFile() {
+  var route = '<?=base_url()?>admin/admin/select_final_file/';
+  var frm = new FormData($('form#file-select-form')[0]);
+  if(frm.get('file').name==''){
+    $('#error-select-file').html('Vui lòng chọn một file.');
+  }else{
+    $.ajax({
+      url:route,
+      processData: false, 
+      contentType: false,
+      type:'post',
+      dataType:'json',
+      data:frm,
+      success:function(data){
+        if(data.error){
+          ssi_modal.notify('error', {content: data.error});
+        }
+        if(data.success){
+          // console.log(data.file_res[0]['file']);
+          var table = $('#sampleTable').DataTable();
+          $('#select-file-modal').modal('hide');
+          // table.cell($('#file'+frm.get('id'))).data("<a rel = 'prettyPhoto' href = '<?=base_url()?>upload/"+data.file_res[0]['file']+"'><img style='height: 50px; width: 50px;'src='<?=base_url()?>upload/"+data.file_res[0]['file']+"'></a>").draw();
+          ssi_modal.notify('success', {content: data.success});
+        }
+      }
+    });
+  }
+}
 $(document).ready(function() {
   $('#dropbtn').click(function(event) {
     var status = $('#statusDrop').val();

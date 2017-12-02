@@ -85,12 +85,12 @@ class M_bill extends CI_Model
             status.name as status_name,
             ')
                 ->from('bill')
-                ->join('status','status.id = bill.status')
-                ->join('unit','unit.id = bill.unit')
-                ->join('project','project.id_bill = bill.id')
-                ->join('customer','bill.id_customer = customer.id')
-                ->join('typedecal', 'bill.id_typedecal = typedecal.id')
-                ->join('extrusion', 'bill.id_extrusion = extrusion.id')
+                ->join('status','status.id = bill.status','left')
+                ->join('unit','unit.id = bill.unit','left')
+                ->join('project','project.id_bill = bill.id','left')
+                ->join('customer','bill.id_customer = customer.id','left')
+                ->join('typedecal', 'bill.id_typedecal = typedecal.id','left')
+                ->join('extrusion', 'bill.id_extrusion = extrusion.id','left')
                 ->join('task','task.id_project = project.id','left')
                 ->where($match)
                 ->order_by('bill.created_at','desc');

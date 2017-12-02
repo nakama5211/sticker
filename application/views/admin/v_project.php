@@ -158,6 +158,8 @@
                       <td>
                          <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
                         </button>
+                        <a class="btn btn-info btn-lg" style="border-radius: 10px;" href="<?php echo base_url().'admin/admin/exp_file/'.$row['id'] ?>">Xuất phiếu thu
+                        </a>
                       </td>
                     </tr>
                   	<?php

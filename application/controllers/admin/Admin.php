@@ -23,6 +23,7 @@ class Admin extends CI_Controller{
         $this->load->model('M_resource');
         $this->load->helper('date');
         $this->load->helper('string');
+        $this->load->helper('My_helper');
         date_default_timezone_set('Asia/Ho_Chi_Minh');
     }
 	function index(){
@@ -524,7 +525,7 @@ class Admin extends CI_Controller{
 							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
-		            		$data['bill'] = $this->M_project->load_my_task_project($match);
+		            		$data['project'] = $this->M_project->load_my_task_project($match);
 		            		$data['classproject'] = $this->M_data->load_class();
 							$this->_data['html_body'] = $this->load->view('admin/v_project',$data, TRUE);
 							break;
@@ -894,11 +895,12 @@ class Admin extends CI_Controller{
 		echo json_encode($data);
 	}
 
-	function exp_file(){
-		$id = $this->input->post('id');
-		$type = $this->input->post('type');
-		$receipt = $this->M_receipt->get_row($id);
-		//var_dump($bill);
+	function exp_file($id){
+		$project = $this->M_project->load_project_by_id($id);
+		// var_dump(date('d'));
+		$khachhang = json_decode($project[0]['thongtin_khachhang'],true);
+        $doanhthu = json_decode($project[0]['thongtin_doanhthu'],true);
+        $filename = $project[0]['project_name'];
 
 		$object = new PHPExcel();
         $objReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -910,7 +912,7 @@ class Admin extends CI_Controller{
         $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
         $array = array();
         $k=1;
-        for ($row = 2; $row <= $highestRow;++$row)
+        for ($row = 1; $row <= $highestRow;++$row)
         {
             for ($col = 0; $col <$highestColumnIndex-1;++$col)
             {
@@ -918,22 +920,150 @@ class Admin extends CI_Controller{
                 
                 if (substr($value, 0,2) == '${' && substr($value,-1) == '}') {    //tim nhung chuoi co chu vung
                 	$value = trim($value,'${ }');
-                	$mData = explode(";", $value);
-                	if ($mData[1] == "text") {
-                		$mData[1] = "textarea";
+                	if ($value ==='ma_phieu') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> 'MP'.date('d').date('m').$k
+                    	);
                 	}
-                    $array[$k] =array(
-                    	'id'=>$k, 
-                    	'ten'=>$mData[0],
-                    	'loai'=>$mData[1], 
-                    	'cot'=>$col, 
-                    	'hang'=>$row
-                    );
+                	if ($value ==='ten_nguoinop' || $value ==='ten_khachhang') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $khachhang['name']
+                    	);
+                	}
+                	if ($value ==='so_dien_thoai') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $khachhang['phone']
+                    	);
+                	}
+                	if ($value ==='ma_khachhang') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['ma_khachhang']
+                    	);
+                	}
+                	if ($value ==='dia_chi') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $khachhang['address']
+                    	);
+                	}
+                	if ($value ==='ten_san_pham') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['project_name']
+                    	);
+                	}
+                	if ($value ==='don_gia') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['cost']
+                    	);
+                	}
+                	if ($value ==='don_vi') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['unit']
+                    	);
+                	}
+                	if ($value ==='so_luong') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['qty']
+                    	);
+                	}
+                	if ($value ==='tien') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['tong_doanhthu']
+                    	);
+                	}
+                	if ($value ==='tam_ung') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $doanhthu['tam_ung']
+                    	);
+                	}
+                	if ($value ==='con_lai') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> $project[0]['tong_doanhthu']-$doanhthu['tam_ung']
+                    	);
+                	}
+                	if ($value ==='bang_chu') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> convert_number_to_words($project[0]['tong_doanhthu'])
+                    	);
+                	}
+                	if ($value ==='ngay') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> date("d")
+                    	);
+                	}
+                	if ($value ==='thang') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> date("m")
+                    	);
+                	}
+                	if ($value ==='nam') {
+                		$array[$k] =array(
+	                    	'id'=>$k, 
+	                    	'cot'=>$col, 
+	                    	'hang'=>$row,
+	                    	'value'=> date("Y")
+                    	);
+                	}
                     $k++;
                 }
             }
         }
-        var_dump($array);
+        // var_dump($array);
+
+        foreach ($array as $dl) {
+        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($dl['cot'],$dl['hang'],$dl['value']);
+        }
+        $object_writer = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+            ob_end_clean();
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename='.$filename.'.xlsx');
+            header('Cache-Control: max-age=0');
+            $object_writer->save('php://output');
+            exit;
 	}
 
 	function create_project(){

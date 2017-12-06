@@ -27,7 +27,7 @@ class Users extends CI_Controller
                 $this->session->set_userdata('avatar',$user['avatar']);
                 $this->session->set_userdata('username', $user['username']);
                 $this->session->set_userdata('group',$user['group']);
-                redirect(base_url().'admin/admin/view_admin/bill');
+                redirect(base_url().'admin/admin/view_admin/');
             }
         }
         $data['csrf'] = array(

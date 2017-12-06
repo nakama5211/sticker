@@ -90,15 +90,8 @@ class Admin extends CI_Controller{
 		            		'icon'=>'fa fa-archive'
 		            	),
 		            	'revenue'=>array(
-		            		'type'=>'tree',
 		            		'name'=>'Quản lý Doanh thu',
-		            		'content'=>array(
-		            			'business'=>array(
-		            				'name'=>'Doanh nghiệp',
-		            				'link'=>'admin/view_admin/business'
-		            			),
-		            			
-		            		),
+		            		'link'=>'admin/view_admin/revenue',
 		            		'icon'=>'fa fa-briefcase'
 		            	),
 		            	'material'=>array(
@@ -179,13 +172,11 @@ class Admin extends CI_Controller{
 		            		$data['classproject'] = $this->M_data->load_class();
 							$this->_data['html_body'] = $this->load->view('admin/v_project',$data, TRUE);
 							break;
-						case 'business':
+						case 'revenue':
 							$match = array(
-								'id_typeproject'=>1,
 								'hidden'=>0
 							);
-							$category['active']['revenue'][0] = 'active';
-							$category['active']['revenue'][$view] = 'fa fa-circle-o';
+							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
 							$data['status'] = $this->M_status->load_status_by_type('project');
 							$data['typeproject'] = $this->M_data->load_typeProject();
@@ -265,12 +256,79 @@ class Admin extends CI_Controller{
 							$this->_data['html_body'] = $this->load->view('admin/v_material',$data, TRUE);
 							break;
 						case 'print':
-							$match = array(
+							$match['printer'] = array(
 								'printer.hidden'=>0,
 							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
-		            		$data['print'] = $this->M_printer->load_data($match);
+		            		$data['print'] = $this->M_printer->load_data($match['printer']);
+					        for($i=0;$i<count($data['print']);$i++){
+					        	foreach (json_decode($data['print'][$i]['thongtin_khachhang'],true) as $key => $value) {
+					        		if ($key=='name') {
+					        			$data['print'][$i]['customer'] = $value;
+					        		}
+			            		}
+					        	foreach ($data['print'][$i] as $key => $value) {
+					        		if ($key=='id') {
+					        			$match['print_detail'] = array(
+								            'print_detail.id_printer'=>$value,
+								            'print_detail.hidden'=>0
+								        );
+								        $data['print'][$i]['material_name'] = '';
+								        $data['print'][$i]['giacong_name'] = '';
+								        $data['print'][$i]['name'] = '';
+								        $data['print'][$i]['big_size'] = '';
+								        $data['print'][$i]['num_print'] = 0;
+								        $data['print'][$i]['num_face'] = '';
+								        $data['print'][$i]['num_test'] = 0;
+								        $data['print'][$i]['num_bad'] = 0;
+								        $data['print'][$i]['num_jam'] = 0;
+								        $data['print'][$i]['num_reprint'] = 0;
+					        			$print_detail = $this->M_printer->load_print_detail($match['print_detail']);
+					        			if(count($print_detail)>0){
+					        				for ($j=0; $j < count($print_detail); $j++) { 
+						        				foreach ($print_detail[$j] as $k => $v) {
+						        					switch ($k) {
+						        					 	case 'material_name':
+						        					 		$data['print'][$i]['material_name'].= $v.';';
+						        					 		break;
+						        					 	case 'name':
+						        					 		$data['print'][$i]['name'].= $v.';';
+						        					 		break;
+						        					 	case 'big_size':
+						        					 		$data['print'][$i]['big_size'].= $v.';';
+						        					 		break;
+						        					 	case 'giacong_name':
+						        					 		$data['print'][$i]['giacong_name'].= $v.';';
+						        					 		break;
+						        					 	case 'num_print':
+						        					 		$data['print'][$i]['num_print']+= $v;
+						        					 		break;
+						        					 	case 'num_face':
+						        					 		$data['print'][$i]['num_face'].= $v.';';
+						        					 		break;
+						        					 	case 'num_test':
+						        					 		$data['print'][$i]['num_test']+= $v;
+						        					 		break;
+						        					 	case 'num_bad':
+						        					 		$data['print'][$i]['num_bad']+= $v;
+						        					 		break;
+						        					 	case 'num_jam':
+						        					 		$data['print'][$i]['num_jam']+= $v;
+						        					 		break;
+						        					 	case 'num_reprint':
+						        					 		$data['print'][$i]['num_reprint']+= $v;
+						        					 		break;
+						        					 	default:
+						        					 		# code...
+						        					 		break;
+						        					} 
+						        				}
+						        			}
+					        			}
+					        		}
+					        	}
+					        }
 							$this->_data['html_body'] = $this->load->view('admin/v_print',$data, TRUE);
 							break;
 						case 'outsouce':
@@ -312,7 +370,7 @@ class Admin extends CI_Controller{
 					$this->_data['html_footer'] = $this->load->view('admin/footer', NULL, TRUE);
 					// Load view method_one_view        
 					$this->load->view('admin/master', $this->_data);
-					// var_dump($data['revenue']);
+					// var_dump($data['print']);
 					break;
 				}
 		        case'2':{
@@ -414,11 +472,6 @@ class Admin extends CI_Controller{
 		            		'link'=>'admin/view_admin/task',
 		            		'icon'=>'fa fa-object-group'
 		            	),
-		            	'print'=>array(
-		            		'name'=>'Quản lý In',
-		            		'link'=>'admin/view_admin/print',
-		            		'icon'=>'fa fa-print'
-		            	),
 		            ); 
 					switch ($view) {
 						case 'task':
@@ -432,11 +485,85 @@ class Admin extends CI_Controller{
 								'task.status!='=>'t001',
 								'task.id_user'=>$this->session->userdata('user_id'),
 							);
+							$match['printer'] = array(
+								'task.hidden'=>0,
+								'task.id_user'=>$this->session->userdata('user_id'),
+								'task.status!='=>'t004',
+								'task.status!='=>'t001',
+							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
 		            		$data['newtask'] = $this->M_task->load_data($match['newtask']);
 		            		$data['oldtask'] = $this->M_task->load_data($match['oldtask']);
-							$this->_data['html_body'] = $this->load->view('admin/v_task',$data, TRUE);
+		            		$data['print'] = $this->M_printer->load_data_for_task_printer($match['printer']);
+		            		for($i=0;$i<count($data['print']);$i++){
+					        	foreach (json_decode($data['print'][$i]['thongtin_khachhang'],true) as $key => $value) {
+					        		if ($key=='name') {
+					        			$data['print'][$i]['customer'] = $value;
+					        		}
+			            		}
+					        	foreach ($data['print'][$i] as $key => $value) {
+					        		if ($key=='id') {
+					        			$match['print_detail'] = array(
+								            'print_detail.id_printer'=>$value,
+								            'print_detail.hidden'=>0
+								        );
+								        $data['print'][$i]['material_name'] = '';
+								        $data['print'][$i]['giacong_name'] = '';
+								        $data['print'][$i]['name'] = '';
+								        $data['print'][$i]['big_size'] = '';
+								        $data['print'][$i]['num_print'] = 0;
+								        $data['print'][$i]['num_face'] = '';
+								        $data['print'][$i]['num_test'] = 0;
+								        $data['print'][$i]['num_bad'] = 0;
+								        $data['print'][$i]['num_jam'] = 0;
+								        $data['print'][$i]['num_reprint'] = 0;
+					        			$print_detail = $this->M_printer->load_print_detail($match['print_detail']);
+					        			if(count($print_detail)>0){
+					        				for ($j=0; $j < count($print_detail); $j++) { 
+						        				foreach ($print_detail[$j] as $k => $v) {
+						        					switch ($k) {
+						        					 	case 'material_name':
+						        					 		$data['print'][$i]['material_name'].= $v.';';
+						        					 		break;
+						        					 	case 'name':
+						        					 		$data['print'][$i]['name'].= $v.';';
+						        					 		break;
+						        					 	case 'big_size':
+						        					 		$data['print'][$i]['big_size'].= $v.';';
+						        					 		break;
+						        					 	case 'giacong_name':
+						        					 		$data['print'][$i]['giacong_name'].= $v.';';
+						        					 		break;
+						        					 	case 'num_print':
+						        					 		$data['print'][$i]['num_print']+= $v;
+						        					 		break;
+						        					 	case 'num_face':
+						        					 		$data['print'][$i]['num_face'].= $v.';';
+						        					 		break;
+						        					 	case 'num_test':
+						        					 		$data['print'][$i]['num_test']+= $v;
+						        					 		break;
+						        					 	case 'num_bad':
+						        					 		$data['print'][$i]['num_bad']+= $v;
+						        					 		break;
+						        					 	case 'num_jam':
+						        					 		$data['print'][$i]['num_jam']+= $v;
+						        					 		break;
+						        					 	case 'num_reprint':
+						        					 		$data['print'][$i]['num_reprint']+= $v;
+						        					 		break;
+						        					 	default:
+						        					 		# code...
+						        					 		break;
+						        					} 
+						        				}
+						        			}
+					        			}
+					        		}
+					        	}
+					        }
+							$this->_data['html_body'] = $this->load->view('admin/v_task_printer',$data, TRUE);
 							break;
 						case 'print':
 							$match = array(
@@ -1354,16 +1481,10 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
-            		'icon'=>'fa fa-briefcase'),
+            		'link'=>'admin/view_admin/revenue',
+            		'icon'=>'fa fa-briefcase'
+            	),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',
             		'link'=>'admin/view_admin/material',
@@ -1441,26 +1562,9 @@ class Admin extends CI_Controller{
 				'file_thiet_ke'		=> $post['file_thietke'],
 		);
 
-		$print = array(
-				'id_project'		=> $id_project,
-				'id_user'			=> $this->session->userdata('user_id'),
-				'id_material'		=> $post['id_loaigiay'],
-				'outsource'			=> $post['id_giacong'],
-				'name'				=> $post['ten_mayin'],
-				'num_face'			=> $this->unNumber_Format($post['so_mat_in']),
-				'num_print'			=> $this->unNumber_Format($post['so_to_in']),
-				'num_test'			=> $this->unNumber_Format($post['so_to_test']),
-				'num_bad' 			=> $this->unNumber_Format($post['so_to_in_hu']),
-				'num_jam'			=> $this->unNumber_Format($post['so_to_ket']),
-				'num_reprint'		=> $this->unNumber_Format($post['in_lai']),
-				'note'				=> $post['note_in'],
-				'tong_so_giay_in_su_dung'	=> $this->unNumber_Format($post['tong_to_in']),
-		);
-
 		$this->M_customer->update_customer($id_khachhang, $khachhang);
 		$this->M_bill->update_bill($id_bill, $donhang);
 		$this->M_project->update_row($id_project, $project);
-		$this->M_printer->update_row($id_project, $print);
 		redirect(base_url().'admin/admin/view_admin/project');
 		
 	}
@@ -1514,16 +1618,10 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
-            		'icon'=>'fa fa-briefcase'),
+            		'link'=>'admin/view_admin/revenue',
+            		'icon'=>'fa fa-briefcase'
+            	),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',
             		'link'=>'admin/view_admin/material',

@@ -290,7 +290,7 @@
       <div class="modal-content">
         <div class="modal-header">
            <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
-           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Update Data Row </h4>
+           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Quy cách in </h4>
         </div>
         <form method="post" id="edit-form">
         <div class="modal-body">
@@ -299,13 +299,6 @@
                  <div class="col-xs-12 col-sm-12 col-md-12" id="form-data-edit">
                  </div>
               </div>
-           </div>
-        </div>
-
-        <div class="modal-footer">
-           <div class="form-group">
-              <button type="button" class="btn btn-sm btn-info" onclick="subEditForm()"> Save <span class="glyphicon glyphicon-saved"></span></button>
-              <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
            </div>
         </div>
         </form>
@@ -370,6 +363,34 @@
               <div class="modal-footer">
                  <div class="form-group">
                     <button type="button" class="btn btn-sm btn-info" id="btn-select-file" disabled="" onclick="confirmSelectFile()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
+                 </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="modal fade" id="select-paper-modal">
+           <div class="modal-dialog">
+           <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Cập nhật loại giấy:</b></h4>
+              </div>
+              <form method="post" id="paper-select-form">
+              <div class="modal-body">
+                 <div class="container-fluid">
+                    <div class="row">
+                       <div class="col-xs-12 col-sm-12 col-md-12" id="form-select-more-paper">
+                       </div>
+                    </div>
+                 </div>
+              </div>
+              <div class="modal-footer">
+                 <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-info" onclick="ConfirmPaper()"> Ok <span class="glyphicon glyphicon-saved"></span></button>
 
                     <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
                  </div>
@@ -459,7 +480,7 @@ function editRow(id){
       id_project:id
     },
     success:function(data){
-      $('#status_'+id).html(data);
+      $('#form-data-edit').html(data);
       $('#edit-modal').modal('show');
     }
   });
@@ -520,6 +541,30 @@ function selectFile(id) {
   $('#error-select-file').html('');
   $('#select-file-modal').modal('show');
 }
+function ConfirmPaper(){
+  var frm = new FormData($('form#paper-select-form')[0]);
+  if(frm.get('id_paper')!=null){
+    var route = '<?=base_url()?>admin/printer/confirm_edit_paper';
+  }else{
+    var route = '<?=base_url()?>admin/printer/confirm_add_paper';
+  }
+  $.ajax({
+    url:route,
+    processData: false, 
+    contentType: false,
+    type:'post',
+    dataType:'json',
+    data:frm,
+    success:function(data){
+      if(data.success){
+        window.location.reload();
+      }
+      if(data.error){
+        ssi_modal.notify('error', {content: data.error});
+      }
+    }
+  });
+}
 
 function file_change(f,i){
   var reader = new FileReader();
@@ -576,6 +621,50 @@ function confirmSelectFile() {
       }
     });
   }
+}
+function selectPaper(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/load_more_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_printer:id,
+    },
+    success:function(data){
+      $('#form-select-more-paper').html(data);
+      $('#select-paper-modal').modal('show');
+    }
+  });
+}
+
+function editPaper(id,id_printer){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/edit_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_paper:id,
+      id_printer:id_printer
+    },
+    success:function(data){
+      $('#form-select-more-paper').html(data);
+      $('#select-paper-modal').modal('show');
+    }
+  });
+}
+function delPaper(id,id_printer){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/delete_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_paper:id,
+      id_printer:id_printer
+    },
+    success:function(data){
+      window.location.reload();
+    }
+  });
 }
 $(document).ready(function() {
   $('#dropbtn').click(function(event) {

@@ -133,5 +133,28 @@ class M_data extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    function load_field_table($table){
+        return $this->db->list_fields($table);
+    }
+
+    function update($match,$data,$table){
+        $this->db->where($match)
+            ->update($table,$data);
+    }
+
+    function insert($data,$table)
+    {
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
+    
+    function get_row($match,$table){
+        $this->db->select()
+            ->from($table)
+            ->where($match);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 

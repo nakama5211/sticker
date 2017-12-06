@@ -155,23 +155,22 @@
                       <td><?php echo $row['created_at']?></td>
                       <td><?php echo $row['project_name']?></td>
                       <td><?php echo number_format($row['tam_ung']).' vnđ'?></td>
-                      <td><?php echo isset($row['tg_tam_ung']) ? $row['tg_tam_ung'] : '';?></td>
-                      <td><?php echo isset($row['doanh_thu_tk']) ? number_format($row['doanh_thu_tk']).' vnđ' : '';?></td>
+                      <td><?php echo isset($row['ngay_tam_ung']) ? $row['ngay_tam_ung'] : '';?></td>
+                      <td><?php echo isset($row['doanhthu_thietke']) ? number_format($row['doanhthu_thietke']).' vnđ' : '';?></td>
                       <td><?php echo isset($row['chiphi_giay']) ? number_format($row['chiphi_giay']).' vnđ' : '';?></td>
                       <td><?php echo isset($row['chiphi_inngoai']) ? number_format($row['chiphi_inngoai']).' vnđ' : '';?></td>
                       <td><?php echo isset($row['chiphi_giacong']) ? number_format($row['chiphi_giacong']).' vnđ' : '';?></td>
                       <td><?php echo isset($row['chiphi_giaohang']) ? number_format($row['chiphi_giaohang']).' vnđ' : '';?></td>
                       <td><?php echo number_format($row['tong_doanhthu']-$row['tong_chiphi']).' vnđ';?></td>
                       <td><?php echo number_format(($row['tong_doanhthu']-$row['tong_chiphi'])/$row['tong_doanhthu']*100).' %';?></td>
-                      <td><?php echo isset($row['tt_donhang']) ? $row['tt_donhang'] : '';?></td>
-                      <td><?php echo isset($row['tt_thutien']) ? $row['tt_thutien'] : '';?></td>
-                      <td><?php echo isset($row['ht_thutien']) ? $row['ht_thutien'] : '';?></td>
-                      <td><?php echo isset($row['tg_hoanthanh']) ? $row['tg_hoanthanh'] : '';?></td>
+                      <td><?php echo isset($row['status_don_hang']) ? $row['status_don_hang'] : '';?></td>
+                      <td><?php echo isset($row['status_thu_tien']) ? $row['status_thu_tien'] : '';?></td>
+                      <td><?php echo isset($row['phieu_thu']) ? $row['phieu_thu'] : '';?></td>
+                      <td><?php echo isset($row['ngay_hoan_thanh_don_hang']) ? $row['ngay_hoan_thanh_don_hang'] : '';?></td>
                       <td><?php echo isset($row['note']) ? $row['note'] : '';?></td>
                       <td>
-                      <?php 
-                        echo '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick=""></button>';
-                      ?>
+                        <button class="btn btn-primary btn-lg" style="border-radius: 10px;" onclick="updateRevenue('<?php echo $row['id']?>')">Cập nhật doanh thu</button> 
+                        <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="updateCost('<?php echo $row['id']?>')">Cập nhật chi phí</button>
                   	  </td>
                     </tr>
                   	<?php
@@ -184,18 +183,18 @@
         </div>
       </div>
     </div>
-  <div class="modal fade" id="edit-modal">
+  <div class="modal fade" id="update-revenue">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
            <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
-           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Update Data Row </h4>
+           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Cập nhật doanh thu: </h4>
         </div>
-        <form method="post" id="edit-form">
+        <form method="post" id="revenue-form">
         <div class="modal-body">
            <div class="container-fluid">
               <div class="row">
-                 <div class="col-xs-12 col-sm-12 col-md-12" id="form-data-edit">
+                 <div class="col-xs-12 col-sm-12 col-md-12" id="form-update-revenue">
                  </div>
               </div>
            </div>
@@ -203,7 +202,34 @@
 
         <div class="modal-footer">
            <div class="form-group">
-              <button type="button" class="btn btn-sm btn-info" onclick="subEditForm()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+              <button type="button" class="btn btn-sm btn-info" onclick="subUpdateRevenue()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+              <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
+           </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="update-cost">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+           <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Cập nhật doanh thu: </h4>
+        </div>
+        <form method="post" id="cost-form">
+        <div class="modal-body">
+           <div class="container-fluid">
+              <div class="row">
+                 <div class="col-xs-12 col-sm-12 col-md-12" id="form-update-cost">
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        <div class="modal-footer">
+           <div class="form-group">
+              <button type="button" class="btn btn-sm btn-info" onclick="subUpdateRevenue()"> Save <span class="glyphicon glyphicon-saved"></span></button>
               <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
            </div>
         </div>
@@ -213,17 +239,31 @@
   </div>
 <?php } ?>
 <script type="text/javascript">
-function editRow(id){
+function updateRevenue(id){
   $.ajax({
-    url:'<?=base_url()?>admin/revenue/load_data_for_business_edit_form/',
+    url:'<?=base_url()?>admin/revenue/load_data_update_revenue/',
     type:'post',
     dataType:'json',
     data:{
-      id:id
+      id_project:id
     },
     success:function(data){
-      $('#form-data-edit').html(data);
-      $('#edit-modal').modal('show');
+      $('#form-update-revenue').html(data);
+      $('#update-revenue').modal('show');
+    }
+  });
+}
+function updateCost(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/revenue/load_data_update_cost/',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_project:id
+    },
+    success:function(data){
+      $('#form-update-cost').html(data);
+      $('#update-cost').modal('show');
     }
   });
 }

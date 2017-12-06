@@ -106,6 +106,8 @@ class M_project extends CI_Model
 
             status.name as status_name,
 
+            task.id as id_task,
+            task.status as task_status,
             task.get_at,
             task.done_at,
         ')
@@ -179,6 +181,14 @@ class M_project extends CI_Model
         ->order_by('project.created_at','desc');
         $query = $this->db->get();
         return $query->result_array();   
+    }
+
+    function get_row($match){
+        $this->db->select()
+            ->from('project')
+            ->where($match);
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 

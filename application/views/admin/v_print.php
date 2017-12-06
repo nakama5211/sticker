@@ -51,26 +51,24 @@
                       <td id="created_at<?php echo $row['id']?>"><?php echo $row['created_at']?></td>
                       <td><?php echo $row['id_project']?></td>
                       <td id="name<?php echo $row['id']?>"><?php echo $row['name']?></td>
-                      <td><?php echo $row['username']?></td>
-                      <td><?php echo $row['customer']?></td>
-                      <td><?php echo $row['bill_note']?></td>
-                      <td id="quantity<?php echo $row['id']?>"><?php echo $row['quantity']?></td>
-                      <td id="id_material<?php echo $row['id']?>"><?php echo $row['material']?></td>
-                      <td><?php echo $row['exc_size']?></td>
-                      <td id="num_face<?php echo $row['id']?>"><?php echo $row['num_face']?></td>
-                      <td id="num_print<?php echo $row['id']?>"><?php echo $row['num_print']?></td>
-                      <td id="outsource<?php echo $row['id']?>"><?php echo $row['outsource_name']?></td>
-                      <td id="note<?php echo $row['id']?>"><?php echo $row['note']?></td>
-                      <td id="num_test<?php echo $row['id']?>"><?php echo $row['num_test']?></td>
-                      <td id="num_bad<?php echo $row['id']?>"><?php echo $row['num_bad']?></td>
-                      <td id="num_jam<?php echo $row['id']?>"><?php echo $row['num_jam']?></td>
-                      <td id="num_reprint<?php echo $row['id']?>"><?php echo $row['num_reprint']?></td>
-                      <td></td>
+                      <td><?php echo isset($row['username'])?$row['username']:'';?></td>
+                      <td><?php echo isset($row['customer'])?$row['customer']:'';?></td>
+                      <td><?php echo isset($row['note'])?$row['note']:''?></td>
+                      <td><?php echo number_format($row['tong_so_giay_in_su_dung'])?> (tờ)</td>
+                      <td><?php echo $row['material_name']?></td>
+                      <td><?php echo isset($row['big_size'])?$row['big_size']:'';?></td>
+                      <td><?php echo $row['num_face']?></td>
+                      <td><?php echo number_format($row['num_print'])?> (tờ)</td>
+                      <td><?php echo $row['giacong_name']?></td>
+                      <td><?php echo $row['note']?></td>
+                      <td><?php echo $row['num_test']?> (tờ)</td>
+                      <td><?php echo $row['num_bad']?> (tờ)</td>
+                      <td><?php echo $row['num_jam']?> (tờ)</td>
+                      <td><?php echo $row['num_reprint']?> (tờ)</td>
+                      <td><?php echo number_format($row['tong_so_giay_in_su_dung']*$row['num_face'])?> (trang)</td>
                       <td>
-                        <?php 
-                          echo '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
-                              </button>';
-                        ?>
+                        <button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id_project'] ?>')">
+                        </button>
                   	  </td>
                     </tr>
                   	<?php
@@ -83,12 +81,12 @@
         </div>
       </div>
     </div>
-  <div class="modal fade" id="edit-modal">
+ <div class="modal fade" id="edit-modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
            <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
-           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Update Data Row </h4>
+           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Chỉnh sửa thông tin: </h4>
         </div>
         <form method="post" id="edit-form">
         <div class="modal-body">
@@ -99,17 +97,38 @@
               </div>
            </div>
         </div>
-
-        <div class="modal-footer">
-           <div class="form-group">
-              <button type="button" class="btn btn-sm btn-info" onclick="subEditForm()"> Save <span class="glyphicon glyphicon-saved"></span></button>
-              <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
-           </div>
-        </div>
         </form>
       </div>
     </div>
   </div>
+  <div class="modal fade" id="select-paper-modal">
+           <div class="modal-dialog">
+           <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Cập nhật loại giấy:</b></h4>
+              </div>
+              <form method="post" id="paper-select-form">
+              <div class="modal-body">
+                 <div class="container-fluid">
+                    <div class="row">
+                       <div class="col-xs-12 col-sm-12 col-md-12" id="form-select-more-paper">
+                       </div>
+                    </div>
+                 </div>
+              </div>
+              <div class="modal-footer">
+                 <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-info" onclick="ConfirmPaper()"> Ok <span class="glyphicon glyphicon-saved"></span></button>
+
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
+                 </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 <?php } ?>
 <script type="text/javascript">
 function editRow(id){
@@ -118,7 +137,7 @@ function editRow(id){
     type:'post',
     dataType:'json',
     data:{
-      id:id
+      id_project:id
     },
     success:function(data){
       $('#form-data-edit').html(data);
@@ -126,9 +145,13 @@ function editRow(id){
     }
   });
 }
-function subEditForm(){
-  var route = '<?=base_url()?>admin/printer/update_data_row/';
-  var frm = new FormData($('form#edit-form')[0]);
+function ConfirmPaper(){
+  var frm = new FormData($('form#paper-select-form')[0]);
+  if(frm.get('id_paper')!=null){
+    var route = '<?=base_url()?>admin/printer/confirm_edit_paper';
+  }else{
+    var route = '<?=base_url()?>admin/printer/confirm_add_paper';
+  }
   $.ajax({
     url:route,
     processData: false, 
@@ -137,17 +160,56 @@ function subEditForm(){
     dataType:'json',
     data:frm,
     success:function(data){
-      if(data.error){
-        $('#error-quantity').html(data.error);
-      }else{
-        var table = $('#sampleTable').DataTable();
-        $('#edit-modal').modal('hide');
-        for (let [key, value] of Object.entries(data.response[0])) {
-            table.cell($('#'+key+frm.get('id'))).data(value).draw();
-        }
-        if(data.success) ssi_modal.notify('success', {content: 'Thành công!!'});
-        if(data.fail) ssi_modal.notify('error', {content: 'Thất bại!!'});
+      if(data.success){
+        window.location.reload();
       }
+      if(data.error){
+        ssi_modal.notify('error', {content: data.error});
+      }
+    }
+  });
+}
+function selectPaper(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/load_more_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_printer:id,
+    },
+    success:function(data){
+      $('#form-select-more-paper').html(data);
+      $('#select-paper-modal').modal('show');
+    }
+  });
+}
+
+function editPaper(id,id_printer){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/edit_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_paper:id,
+      id_printer:id_printer
+    },
+    success:function(data){
+      $('#form-select-more-paper').html(data);
+      $('#select-paper-modal').modal('show');
+    }
+  });
+}
+function delPaper(id,id_printer){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/delete_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_paper:id,
+      id_printer:id_printer
+    },
+    success:function(data){
+      window.location.reload();
     }
   });
 }

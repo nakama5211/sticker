@@ -61,64 +61,76 @@ else{
                   <div id="external_filter_container" style="float: right; margin-right: 37%;"></div>
                 </div>
                   <hr>
-                <table class="stripe row-border order-column" cellspacing="0" width="100%" id="sampleTable">
+                <table class="stripe row-border order-column" id="sampleTable">
                   <thead>
-                    <tr class="text-center">
+                    <tr style="text-align: center;">
                       <th></th>
-                      <th class="col-data-table-0-7">Mã dự án</th>
-                      <th class="col-data-table-1-2">File thiết kế</th>
+                      <th class="col-data-table-0-7">Mã bài in</th>
+                      <th class="col-data-table-0-8">Máy in</th>
                       <th class="col-data-table-1-1">Ngày nhận task</th>
                       <th class="col-data-table-0-9">Ngày hoàn thành</th>
-                      <!-- <th class="col-data-table-1-8">Hạng mục công việc</th> -->
                       <th class="col-data-table-1-2">Trạng thái task</th>
-                      <th class="col-data-table-0-7">Dự án</th>
-                      
-                      <!-- <th class="col-data-table-1-2">File đính kèm</th> -->
-                      <!-- <th class="col-data-table-1-2">Người liên hệ</th> -->
-                      <th class="col-data-table-1-4">Thời hạn giao hàng</th>
-                      <th class="col-data-table-1">Doanh thu</th>
-                      <th class="col-data-table-1-2">Chi phí</th>
                       <th class="col-data-table-1">Số lượng</th>
-                      <th class="col-data-table-0-5">Đơn vị</th>
+                      <th class="col-data-table-1">NV in</th>
+                      <th class="col-data-table-1-9">Khách hàng</th>
+                      <th class="col-data-table-0-8">Mô tả</th>
+                      <th class="col-data-table-0-9">Giấy in</th>
+                      <th class="col-data-table-0-7">Khổ giấy</th>
+                      <th class="col-data-table-0-8">Số mặt in</th>
+                      <th class="col-data-table-0-8">Số tờ in</th>
+                      <th class="col-data-table-0-8">Gia công</th>
+                      <th class="col-data-table-0-8">Ghi chú</th>
+                      <th class="col-data-table-0-8">Số tờ test</th>
+                      <th class="col-data-table-1">Số tờ in hư</th>
+                      <th class="col-data-table-1-2">Số tờ kẹt giấy</th>
+                      <th class="col-data-table-1-4">Số tờ hư - in lại</th>
+                      <th class="col-data-table-1-3">Tổng số trang in</th>
                       <th class="col-data-table-1-8">Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <?php foreach ($project as $row) {
-                      $donhang = json_decode($row['thongtin_donhang'],true);
-                      // var_dump($donhang['quantity']);
+                    <?php foreach ($print as $row) {
                     ?>
                     <tr id="row<?php echo $row['id']?>">
                       <td></td>
-                      <td><?php echo $row['id']?></td>
-                      
-                      <td><?php echo "<a rel = 'prettyPhoto' href = '".$row['file_thiet_ke']."'><img style='height: 50px; width: 50px;'src='".$row['file_thiet_ke']."'></a>"?></td>
+                      <td><?php echo $row['id_project']?></td>
+                      <td id="name<?php echo $row['id']?>"><?php echo $row['name']?></td>
                       <td><?php echo $row['get_at'];?></td>
                       <td><?php echo $row['done_at']?></td>
                       
                       <td id="status_<?php echo $row['id']?>"><?php echo $row['status_name']?></td>
-                      <td><?php echo $row['project_name']?></td>
+                      <td><?php echo number_format($row['tong_so_giay_in_su_dung'])?> (tờ)</td>
+                      <td><?php echo $row['username']?></td>
+                      <td><?php echo $row['customer']?></td>
+                      <td><?php echo isset($row['note'])?$row['note']:''?></td>
                       
-                      <td><?php echo $row['dead_line']?></td>
-                      <td><?php echo number_format($row['tong_doanhthu'])." ₫"?></td>
-                      <td><?php echo number_format($row['tong_chiphi'])." ₫"?></td>
-                      <td><?php echo number_format($donhang['quantity'])?></td>
-                      <td><?php echo $donhang['unit']?></td>
+                      <td><?php echo $row['material_name']?></td>
+                      <td><?php echo isset($row['big_size'])?$row['big_size']:'';?></td>
+                      <td><?php echo $row['num_face']?></td>
+                      <td><?php echo number_format($row['num_print'])?> (tờ)</td>
+                      <td><?php echo $row['giacong_name']?></td>
+                      <td><?php echo $row['note']?></td>
+                      <td><?php echo $row['num_test']?> (tờ)</td>
+                      <td><?php echo $row['num_bad']?> (tờ)</td>
+                      <td><?php echo $row['num_jam']?> (tờ)</td>
+                      <td><?php echo $row['num_reprint']?> (tờ)</td>
+                      <td><?php echo number_format($row['tong_so_giay_in_su_dung']*$row['num_face'])?> (trang)</td>
                       <td>
                       <?php 
                       if($row['task_status'] != 't003'){ 
                       ?>
-                        <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="openModalSelectFile('<?php echo $row['id'] ?>')">Chốt file
-                        </button>
+                        <button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id_project']?>')">
+                              </button>
                       <?php } 
-                      if($row['file_thiet_ke'] != '' && $row['task_status'] != 't003'){
+                      if($row['tong_so_giay_in_su_dung'] != '' && $row['task_status'] != 't003'){
                       ?> 
                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="doneTask('<?php echo $row['id_task']?>','<?php echo($this->session->userdata('group'))?>')">Hoàn tất
                         </button>
                       <?php }?>
                       </td>
                     </tr>
-                    <?php }?>
+                    <?php
+                    } ?>
                   </tbody>
                 </table>
               </div>
@@ -127,34 +139,45 @@ else{
         </div>
       </div>
     </div>
-     <div class="modal fade" id="select-file-modal">
+  <div class="modal fade" id="edit-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+           <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+           <h4 class="modal-title" style="font-size: 20px; padding: 12px;"> Chỉnh sửa thông tin: </h4>
+        </div>
+        <form method="post" id="edit-form">
+        <div class="modal-body">
+           <div class="container-fluid">
+              <div class="row">
+                 <div class="col-xs-12 col-sm-12 col-md-12" id="form-data-edit">
+                 </div>
+              </div>
+           </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="select-paper-modal">
            <div class="modal-dialog">
            <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
-                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Chọn file thiết kế:</b></h4>
+                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Cập nhật loại giấy:</b></h4>
               </div>
-              <form method="post" id="file-select-form">
+              <form method="post" id="paper-select-form">
               <div class="modal-body">
                  <div class="container-fluid">
                     <div class="row">
-                      <div class="form-group">
-                       <div><b>Nhập link file</b></div>
-                       <div class="input-group">
-                          <div class="input-group-addon iga2">
-                             <span class="glyphicon glyphicon-folder-open"></span>
-                          </div>
-                          <input type="text" class="form-control" name="file">
+                       <div class="col-xs-12 col-sm-12 col-md-12" id="form-select-more-paper">
                        </div>
-                       <div class="help-block" id="error-select-file"></div>
-                    </div>
                     </div>
                  </div>
-                 <input type="hidden" name="id" id="cur-id-select-file">
               </div>
               <div class="modal-footer">
                  <div class="form-group">
-                    <button type="button" class="btn btn-sm btn-info" id="btn-select-file" onclick="confirmSelectFile()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+                    <button type="button" class="btn btn-sm btn-info" onclick="ConfirmPaper()"> Ok <span class="glyphicon glyphicon-saved"></span></button>
 
                     <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button>
                  </div>
@@ -215,30 +238,87 @@ function doneTask(id,group){
       }
     });
   }
-function openModalSelectFile(id){
-  $('#cur-id-select-file').val(id);
-  $('#select-file-modal').modal('show');
+function editRow(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/load_data_for_edit_form/',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_project:id
+    },
+    success:function(data){
+      $('#form-data-edit').html(data);
+      $('#edit-modal').modal('show');
+    }
+  });
 }
-function confirmSelectFile() {
-  var route = '<?=base_url()?>admin/task/select_final_file/';
-  var frm = new FormData($('form#file-select-form')[0]);
-  if(frm.get('file')==''){
-    $('#error-select-file').html('Vui lòng điền vào trường này.');
+function ConfirmPaper(){
+  var frm = new FormData($('form#paper-select-form')[0]);
+  if(frm.get('id_paper')!=null){
+    var route = '<?=base_url()?>admin/printer/confirm_edit_paper';
   }else{
-    $.ajax({
-      url:route,
-      processData: false, 
-      contentType: false,
-      type:'post',
-      dataType:'json',
-      data:frm,
-      success:function(data){
-        if(data){
-          window.location.reload();
-        }
-      }
-    });
+    var route = '<?=base_url()?>admin/printer/confirm_add_paper';
   }
+  $.ajax({
+    url:route,
+    processData: false, 
+    contentType: false,
+    type:'post',
+    dataType:'json',
+    data:frm,
+    success:function(data){
+      if(data.success){
+        window.location.reload();
+      }
+      if(data.error){
+        ssi_modal.notify('error', {content: data.error});
+      }
+    }
+  });
+}
+function selectPaper(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/load_more_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_printer:id,
+    },
+    success:function(data){
+      $('#form-select-more-paper').html(data);
+      $('#select-paper-modal').modal('show');
+    }
+  });
+}
+
+function editPaper(id,id_printer){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/edit_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_paper:id,
+      id_printer:id_printer
+    },
+    success:function(data){
+      $('#form-select-more-paper').html(data);
+      $('#select-paper-modal').modal('show');
+    }
+  });
+}
+function delPaper(id,id_printer){
+  $.ajax({
+    url:'<?=base_url()?>admin/printer/delete_paper',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_paper:id,
+      id_printer:id_printer
+    },
+    success:function(data){
+      window.location.reload();
+    }
+  });
 }
 $(document).ready(function(){
   $('#dropbtn').click(function(event) {

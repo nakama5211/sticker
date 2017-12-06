@@ -29,7 +29,7 @@ class Task extends CI_Controller{
 			'id_project'=>$frm['id_project'],
 			'id_class'=>$frm['id_depart'],
 			'id_user'=>$frm['id_user'],
-			'status'=>'t001',
+			'status'=>'t001'
 		);
 		$project = [];
 		switch ($frm['id_depart']) {
@@ -84,6 +84,7 @@ class Task extends CI_Controller{
 		$group = $this->input->post('group');
 		$match['task'] = array(
 			'status'=>'t002',
+			'get_at'=>date('Y-m-d H:i:s'),
 		);
 		$this->M_task->update($id,$match['task']);
 		$task = $this->M_task->get_row($id);
@@ -143,6 +144,7 @@ class Task extends CI_Controller{
 		$group = $this->input->post('group');
 		$match['task'] = array(
 			'status'=>'t003',
+			'done_at'=>date('Y-m-d H:i:s'),
 		);
 		$this->M_task->update($id,$match['task']);
 		$task = $this->M_task->get_row($id);
@@ -153,6 +155,7 @@ class Task extends CI_Controller{
 				break;
 			case '3':
 				$project['status'] = 'p302';
+				$this->update_cost_print_for_project($task[0]['id_project']);
 				break;
 			default:
 				# code...
@@ -230,5 +233,28 @@ class Task extends CI_Controller{
       	$this->M_project->update_row($id,$file_req);
       	$data['success'] = "Thành công!!";
       	echo(json_encode($data));
+	}
+
+	function update_cost_print_for_project($id_project){
+		$match['project'] = array(
+			'project.id'=>$id_project,
+			'project.hidden'=>0
+		);
+		$match['printer'] = array(
+			'printer.id_project'=>$id_project,
+			'printer.hidden'=>0
+		);
+		$project = $this->M_project->get_row($match['project']);
+		if($project[0]['thongtin_chiphi']){
+			$list_cost = json_decode($project[0]['thongtin_chiphi'],true);
+			if (isset($list_cost['chiphi_giay'])) {
+				$printer = $this->M_printer->get_row($match['printer']);
+				$list_cost['chiphi_giay'] = $printer[0]['cost_print'];
+			}
+		}
+		$new_data['project'] = array(
+			'thongtin_chiphi'=>json_encode($list_cost)
+		);
+		$this->M_data->update($match['project'],$new_data['project'],'project');
 	}
 }

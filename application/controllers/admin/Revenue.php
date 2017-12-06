@@ -22,168 +22,201 @@ class Revenue extends CI_Controller{
         $this->load->helper('string');
         date_default_timezone_set('Asia/Ho_Chi_Minh');
     }
-	function load_data_for_business_edit_form(){
-        $match = array('hidden'=>0);
-        $id = $this->input->post('id');
-        $revenue = $this->M_revenue->get_row_for_business($id);
-        $data['form-data'] = '';
-        $data['form-data'].= '<input type="hidden" name="id" value="'.$id.'">';
-        $data['form-data'].= '<input type="hidden" name="id_project" value="'.$revenue[0]['id_project'].'">';
-        foreach ($revenue[0] as $key => $value) {
-            switch ($key) {
-                case 'revenue_design':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Doanh thu thiết kế</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'revenue_outsourcing':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Doanh thu gia công</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'revenue_molding':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Doanh thu lên khuôn</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'revenue_profit':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Lợi nhuận</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'cost_print':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Chi phí in</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'cost_delivery':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Chi phí giao hàng</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'cost_outsourcing':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Chi phí gia công</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'cost_paper':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Chi phí giấy</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
-                        </div>
-                    </div>
-                    ';
-                    break;
-                case 'note':
-                    $data['form-data'].='
-                    <div class="form-group">
-                        <div><b>Ghi chú</b></div>
-                        <div class="input-group">
-                            <div class="input-group-addon iga2">
-                                <span class="fa fa-pencil-square"></span>
-                            </div>
-                        <textarea type="text" class="form-control" name="'.$key.'">'.$value.'</textarea>
-                        </div>
-                    </div>
-                    ';
-                    break;
-                default:
-                    
-                    break;
+
+    function update_data_revenue(){
+        $frm = $this->input->post();
+        $id_project = $frm['id_project'];
+        unset($frm['id_project']);
+        $match['project'] = array(
+            'project.id'=>$id_project,
+            'project.hidden'=>0
+        );
+        $project = $this->M_project->get_row($match['project']);
+        if($project[0]['thongtin_chiphi']){
+            $list_revenue = json_decode($project[0]['thongtin_chiphi'],true);
+            foreach ($list_revenue as $key => $value) {
+                if(isset($frm[$key])){
+                    $list_revenue[$key] = $frm[$key];
+                }
             }
         }
-        $data['form-data'].= '
-            <div class="form-group">
-                <div class="help-block" id="error-quantity"></div>
-            </div>
-        ';
+        $new_data['project'] = array(
+            'thongtin_doanhthu'=>json_encode($list_revenue)
+        )
+        $this->M_data->update($match['project'],$new_data['project'],'project');
+        $data['success'] = "thành công.";
+        echo json_encode($data);
+    }
+
+    function load_data_update_revenue(){
+        $id_project = $this->input->post('id_project');
+        $match['project'] = array(
+            'project.id'=>$id_project,
+            'project.hidden'=>0
+        );
+        $data['form-data'] = '';
+        $data['form-data'].= '<input type="hidden" name="id_project" value="'.$id_project.'">';
+        $project = $this->M_project->get_row($match['project']);
+        if($project[0]['thongtin_doanhthu']){
+            foreach (json_decode($project[0]['thongtin_doanhthu'],true) as $key => $value) {
+                switch ($key) {
+                    case 'doanhthu_thietke':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Doanh thu thiết kế</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'tam_ung':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Tạm ứng</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'ngay_tam_ung':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Ngày tạm ứng</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="date" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'status_thu_tien':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Tình trạng thu tiền</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'phieu_thu':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Phiếu thu/ Hóa đơn</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'ghi_chu':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Ghi chú</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <textarea type="text" class="form-control" name="'.$key.'">'.$value.'</textarea>
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    default:
+                        
+                        break;
+                }  
+            }
+        }
         echo json_encode($data['form-data']);
     }
 
-    function update_data_business(){
-        $frm = $this->input->post();
-        $id = $frm['id'];
-        $id_project = $frm['id_project'];
-        $data = [];
-        unset($frm['id'],$frm['id_project']);
-        $revenue = array(
-            'design'=>$frm['revenue_design'],
+    function load_data_update_cost(){
+        $id_project = $this->input->post('id_project');
+        $match['project'] = array(
+            'project.id'=>$id_project,
+            'project.hidden'=>0
         );
-        $cost = array(
-            'paper'=>$frm['cost_paper'],
-            'print'=>$frm['cost_print'],
-            'delivery'=>$frm['cost_delivery'],
-            'outsourcing'=>$frm['cost_outsourcing']
-        );
-        $match_cost = array('id_project'=>$id_project);
-        $this->M_cost->extra_update($match_cost,$cost);
-        $this->M_revenue->update($id,$revenue);
-        $data['response'] = $this->M_revenue->get_row_for_business($id);
-        unset(
-            $data['response'][0]['id'],
-            $data['response'][0]['id_project']
-        );
-        echo json_encode($data);
+        $data['form-data'] = '';
+        $data['form-data'].= '<input type="hidden" name="id_project" value="'.$id_project.'">';
+        $project = $this->M_project->get_row($match['project']);
+        if($project[0]['thongtin_chiphi']){
+            foreach (json_decode($project[0]['thongtin_chiphi'],true) as $key => $value) {
+                switch ($key) {
+                    case 'chiphi_giay':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Chi phí giấy</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input disabled type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'chiphi_giacong':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Chi phí gia công</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'chiphi_giaohang':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Chi phí giao hàng</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    case 'chiphi_inngoai':
+                        $data['form-data'].='
+                        <div class="form-group">
+                            <div><b>Chi phí in ngoài</b></div>
+                            <div class="input-group">
+                                <div class="input-group-addon iga2">
+                                    <span class="fa fa-pencil-square"></span>
+                                </div>
+                            <input type="text" class="form-control" name="'.$key.'" value="'.$value.'">
+                            </div>
+                        </div>
+                        ';
+                        break;
+                    default:
+                        
+                        break;
+                }  
+            }
+        }
+        echo json_encode($data['form-data']);
     }
 }

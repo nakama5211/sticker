@@ -67,13 +67,13 @@
             </div>
           </div>
           <!-- Sidebar Menu-->
-          <ul class="sidebar-menu">
+          <ul class="sidebar-menu" style="float: none;">
             <?php if(isset($category)){
               foreach ($category as $key => $value){
-                if($key=='revenue'||$key=='resource'){
+                if($key=='resource'){
                       ?>
                       <li class="treeview <?php echo isset($active[$key][0]) ? $active[$key][0] : ''; ?>"><a href="#"><i class="<?php echo $value['icon']?>"></i><span><?php echo $value['name']?></span><i class="fa fa-angle-right"></i></a>
-                        <ul class="treeview-menu">
+                        <ul class="treeview-menu" style="float: none;">
                           <?php 
                             foreach ($value['content'] as $k => $v) {?>
                               <li><a href="<?php echo base_url().'admin/'.$v['link']?>"><i class="<?php echo isset($active[$key][$k]) ? $active[$key][$k] : 'fa fa-circle'; ?>"></i> <?php echo $v['name']?></a></li>

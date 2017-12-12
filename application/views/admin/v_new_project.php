@@ -1,14 +1,5 @@
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Thêm Dự Án Mới</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Home</li>
-              <li class="active"><a href="<?php echo base_url().'admin/admin/view_admin/project'?>">Project</a></li>
-            </ul>
-          </div>
-        </div>
+        
         <?php if($ms=$this->session->userdata('error')){ ?>
           <div class="alert alert-danger" id="scs-msg" >
           <strong><?php echo $ms; ?></strong>
@@ -40,7 +31,7 @@
                                     <div class="col-sm-6">
                                          <input type="text" name="name_customer" value="" class="form-control" placeholder="Tên khách hàng" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnCustomer"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnCustomer"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="customer" style="display: none;">
                                     <input type="hidden" id="statusCustomer" value="0">
@@ -85,7 +76,7 @@
                                     <div class="col-sm-6">
                                         <input type="hidden" id="statusDonhang" value="0" class="form-control" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnDonhang"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnDonhang"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="donhang" style="display: none;">
                                   <div class="form-group">
@@ -103,6 +94,30 @@
                                     <span>*Đơn vị tính</span>
                                   </div>
                                   <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                         <input type="text" name="status_thu_tien"  class="form-control" >
+                                    </div>
+                                    <span>*Tình trạng thu tiền</span>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                        <select required="" class="form-control" name="phieu_thu">
+                                          <option value="Hóa đơn">Hóa đơn</option>
+                                          <option value="Phiếu thu">Phiếu thu</option>
+                                        </select>
+                                    </div>
+                                    <span>*Hình thức thu tiền</span>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                         <input required="" type="text" name="file_thietke"  class="form-control" >
+                                    </div>
+                                    <span>*File thiết kế</span>
+                                  </div>
+                                  <div class="form-group">
                                       <label class="col-sm-3 control-label"></label>
                                       <div class="col-sm-6">
                                            <textarea name="note_donhang" value="" class="form-control" placeholder="Ghi chú" ></textarea>
@@ -113,9 +128,9 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Doanh thu</label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="doanhthu" value="0" class="form-control so" >
+                                        <input required="" type="text" name="doanhthu" value="0" class="form-control so" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnDoanhthu"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnDoanhthu"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="doanhthu" style="display: none;">
                                   <input type="hidden" id="statusDoanhthu" value="0">
@@ -125,6 +140,13 @@
                                          <input type="text" name="tam_ung" value="0" class="form-control so" >
                                     </div>
                                     <span>*Tạm ứng</span>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                         <input required="" type="date" name="ngay_tam_ung" value="" class="form-control so" >
+                                    </div>
+                                    <span>*Ngày tạm ứng</span>
                                   </div>
                                   <div class="form-group">
                                       <label class="col-sm-3 control-label"></label>
@@ -139,7 +161,7 @@
                                     <div class="col-sm-6">
                                          <input type="text" readonly="" id="tong_chiphi" name="chiphi" value="" class="form-control" value="0" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnChiphi"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnChiphi"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="chiphi" style="display: none;">
                                     <input type="hidden" id="statusChiphi" value="0">
@@ -179,117 +201,9 @@
                                          <input type="date" id="today" name="deadline" value="" class="form-control" >
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">Quy cách in</label>
-                                    <div class="col-sm-6">
-                                         <input type="hidden" id="statusIn" value="0" class="form-control"  >
-                                    </div>
-                                    <button class="btn btn-primary" id="btnIn"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
-                                </div>
-                                <div id="in" style="display: none;">
-                                    <div class="form-group">
-                                      <label class="col-sm-3 control-label"></label>
-                                      <div class="col-sm-6">
-                                           <select id="loai_giay" class="form-control" name="id_loaigiay"  aria-required="true"  >
-                                          <option selected hidden disabled value="">Chọn loại giấy</option>
-                                          <?php
-                                          if(!$pages) echo "<option value='0'>Empty</option>";
-                                          else{
-                                            foreach ($pages as $page) {
-                                              echo "<option  gia=".$page['price']." value=".$page['id'].">".$page['name']."</option>";
-                                            }
-                                          }
-                                          ?>
-                                          </select>
-                                      </div>
-                                      <span>*Loại giấy</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <select id="decalpriceform-decaltype" class="form-control" name="id_giacong"  aria-required="true">
-                                            <option selected hidden disabled value="">Chọn loại gia công</option>
-                                            <?php
-                                            if(!$giacong) echo "<option value='0'>Empty</option>";
-                                            else{
-                                              foreach ($giacong as $row) {
-                                                echo "<option value=".$row['id'].">".$row['name']."</option>";
-                                              }
-                                            }
-                                            ?>
-                                            </select>
-                                        </div>
-                                        <span>*Gia công</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" name="ten_mayin"  class="form-control" >
-                                        </div>
-                                        <span>*Tên máy in</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="1" name="so_mat_in" class="form-control so"  >
-                                        </div>
-                                        <span>*Số mặt in</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="0" name="so_to_in" id="so_to_in" class="form-control so"  >
-                                        </div>
-                                        <span>*Số tờ in</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="0" name="so_to_test" id="so_to_test" class="form-control so"  >
-                                        </div>
-                                        <span>*Số tờ test</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="0" name="so_to_in_hu" id="so_to_hu" class="form-control so"  >
-                                        </div>
-                                        <span>*Số tờ in hư</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="0" name="so_to_ket" id="so_to_ket" class="form-control so"  >
-                                        </div>
-                                        <span>*Số tờ kẹt giấy</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="0" name="in_lai" id="in_lai" class="form-control so"  >
-                                        </div>
-                                        <span>*Số tờ in hư - In lại</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <textarea  name="note_in"  class="form-control" placeholder="Ghi chú in"></textarea>
-                                        </div>
-                                        <span>*Ghi chú</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-6">
-                                             <input type="text" value="0" name="tong_to_in" id="tong_to" class="form-control so"  >
-                                        </div>
-                                        <span>*Tổng số giấy in sử dụng</span>
-                                    </div>
-                                </div>
-                                
                                 <div class="form-group">
                                   <div style="margin: 0px 45%;">
-                                    <button type="submit" class="button submit-button btn btn-info btn-lg glyphicon glyphicon-floppy-save saveEdit" style="border-radius: 10px; ">Save</button>
+                                    <button type="submit" class="button submit-button btn btn-info btn-md glyphicon glyphicon-floppy-save saveEdit" style="border-radius: 10px; ">Save</button>
                                   </div>
                                 </div>
                             </form>

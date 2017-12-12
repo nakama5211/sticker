@@ -186,24 +186,38 @@ class Task extends CI_Controller{
 		);
 		$list_task = $this->M_task->get_task_by_match($match);
 		$check_list = [];
+		$user_list = [];
 		foreach ($list_task as $key => $value) {
-			$check_list[$value['progress']] = $value['username']; 
+			$check_list[$value['progress']] = $value['id']; 
+			$user_list[$value['progress']][$value['id']]['username'] = $value['username'];
+			$user_list[$value['progress']][$value['id']]['avatar'] = $value['avatar'];
 			if($value['status']=='p405') $check_list['p405'] = 'Hoàn tất.';
 		}
 		$progress = $this->M_status->load_status_by_type('progress');
 		$data['progress'] = '';
         foreach ($progress as $key => $value) {
+        	if($value['id']=="pg001" ){
+        		$checked = "checked";
+        	}else $checked = "";
         	$data['progress'].= '
                           <div class="[ form-group ] disabled">
-                              <input type="checkbox" name="fancy-checkbox-default" id="fancy-checkbox-default" '.(isset($check_list[$value['id']])?'checked=""':'').' disabled="" autocomplete="off"/>
+                              <input type="checkbox" name="fancy-checkbox-default" id="fancy-checkbox-default" '.(isset($check_list[$value['id']])?'checked=""':'').$checked.' disabled="" autocomplete="off"/>
                               <div class="[ btn-group ]" style="width: 100%">
                                   <label for="fancy-checkbox-default" class="[ btn btn-'.$value['class'].' ]">
-                                      <span class="[ glyphicon glyphicon-ok ]"></span>
+                                      <span style="font-size:16px;" class="[ glyphicon glyphicon-lg glyphicon-ok-circle ]"></span>
                                       <span> </span>
                                   </label>
-                                  <label for="fancy-checkbox-default" class="[ btn btn-default active ]" style="width: 80%">
-                                      '.$value['name'].' ('.(isset($check_list[$value['id']])?$check_list[$value['id']]:'').')
-                                  </label>
+                                  <label for="fancy-checkbox-default" class="[ btn btn-default active ]" style="width: 70%">
+                                      '.$value['name'].'
+                                  </label>';
+                                  if (isset($user_list[$value['id']])) {
+                                  	foreach ($user_list[$value['id']] as $k => $v) {
+                                  		$data['progress'].= '
+                                  			<a onclick="viewUserTask('.$k.')"><img width="34" height="34" src="'.$v['avatar'].'" title="'.$v['avatar'].'" style="border-radius:3px;"></a>
+                                  		';
+                                  	}
+                                  }
+        $data['progress'].= '                      
                               </div>
                           </div>
             ';
@@ -214,10 +228,10 @@ class Task extends CI_Controller{
                               <input type="checkbox" name="fancy-checkbox-default" id="fancy-checkbox-default" checked="" disabled="" autocomplete="off"/>
                               <div class="[ btn-group ]" style="width: 100%">
                                   <label for="fancy-checkbox-default" class="[ btn btn-default ]">
-                                      <span class="[ glyphicon glyphicon-ok ]"></span>
+                                      <span style="font-size:16px;" class="[ glyphicon glyphicon-ok-circle ]"></span>
                                       <span> </span>
                                   </label>
-                                  <label for="fancy-checkbox-default" class="[ btn btn-default active ]" style="width: 80%">
+                                  <label for="fancy-checkbox-default" class="[ btn btn-default active ]" style="width: 70%">
                                       '.$check_list['p405'].'
                                   </label>
                               </div>
@@ -256,5 +270,48 @@ class Task extends CI_Controller{
 			'thongtin_chiphi'=>json_encode($list_cost)
 		);
 		$this->M_data->update($match['project'],$new_data['project'],'project');
+	}
+
+	function view_user_task(){
+		$id_user = $this->input->post('id_user');
+		$match['task'] = array(
+			'task.hidden'=>0,
+			'task.id_user'=>$id_user
+		);
+		$list_task = $this->M_task->get_task_for_user($match['task']);
+		$data['list_task'] = '';
+		$data['list_task'].= '
+		<div class="widget-box">
+          <div class="widget-title"> <span class="icon"><i class="fa fa-clock-o"></i></span>
+            <h5>Nhân viên: '.$list_task[0]['username'].' - Phòng: '.$list_task[0]['depart_name'].'</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Ngày nhận</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+        ';
+		foreach ($list_task as $key => $value) {
+			$data['list_task'].= '
+				<tr>
+                  <td class="taskDesc"><i class="icon-info-sign"></i>'.$value['id_project'].'</td>
+                  <td class="taskStatus"><span class="in-progress">'.$value['get_at'].'</span></td>
+                  <td class="taskStatus"><span class="in-progress">'.$value['status_name'].'</span></td>
+                </tr>
+			';
+		}
+                
+        $data['list_task'].= '
+              </tbody>
+            </table>
+          </div>
+        </div>
+        ';
+        echo json_encode($data);
 	}
 }

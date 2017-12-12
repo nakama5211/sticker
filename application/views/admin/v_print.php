@@ -3,17 +3,7 @@
   else{
                 ?>
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Data Table</a></li>
-            </ul>
-          </div>
-          <!-- <div><a class="btn btn-primary btn-flat" href="#"><i class="fa fa-lg fa-plus"></i></a><a class="btn btn-info btn-flat" href="#"><i class="fa fa-lg fa-refresh"></i></a><a class="btn btn-warning btn-flat" href="#"><i class="fa fa-lg fa-trash"></i></a></div> -->
-        </div>
+        <h3 style="margin-top: -15px; margin-bottom: 10px;">Quản lý in</h3>
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -21,7 +11,7 @@
                 <table class="stripe row-border order-column" id="sampleTable">
                   <thead>
                     <tr style="text-align: center;">
-                      <th></th>
+                      <th class="col-data-table-0-1"></th>
                       <th class="col-data-table-0-6">Ngày</th>
                       <th class="col-data-table-0-7">Mã bài in</th>
                       <th class="col-data-table-0-8">Máy in</th>
@@ -67,7 +57,7 @@
                       <td><?php echo $row['num_reprint']?> (tờ)</td>
                       <td><?php echo number_format($row['tong_so_giay_in_su_dung']*$row['num_face'])?> (trang)</td>
                       <td>
-                        <button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id_project'] ?>')">
+                        <button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id_project'] ?>')">
                         </button>
                   	  </td>
                     </tr>

@@ -1,14 +1,5 @@
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="<?php echo base_url().'admin/admin/view_admin/bill'?>">Bill</a></li>
-            </ul>
-          </div>
-        </div>
+        
         <?php if($ms=$this->session->userdata('error')){ ?>
           <div class="alert alert-danger" id="scs-msg" >
           <strong><?php echo $ms; ?></strong>
@@ -137,7 +128,7 @@
                                       <img src="" width="100%" height="auto" id="img0" style="margin-top: 10px;  display: none;" />
                                     </div>
                                 </div>
-                                <button type="submit" class="button submit-button btn btn-info btn-lg glyphicon glyphicon-floppy-save saveEdit" style="border-radius: 10px; float: right; margin-right: 150px;">Save</button>           
+                                <button type="submit" class="button submit-button btn btn-info btn-md glyphicon glyphicon-floppy-save saveEdit" style="border-radius: 10px; float: right; margin-right: 150px;">Save</button>           
                             </form>
                     	</div>
                 </section>

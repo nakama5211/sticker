@@ -67,7 +67,7 @@ class Home extends CI_Controller{
       
 		$bill['customer'] = array('name'=>$post['customerName'],'email'=>$post['customerEmail'],'phone'=>$post['customerPhone'],'address'=>$post['customerAddress']);
 		$id_customer = $this->M_customer->insert_customer($bill['customer']);
-		$bill['bill'] = array('id_customer'=>$id_customer,'id_typedecal'=>$sess['decalType'],'id_extrusion'=>$sess['isExtrusion'],'width'=>$sess['sizeWidth'],'height'=>$sess['sizeHeight'],'quantity'=>$sess['quantity'],'file'=>$data['image'],'status'=>'b001','note'=>$post['note']);
+		$bill['bill'] = array('id_customer'=>$id_customer,'id_typedecal'=>$sess['decalType'],'id_extrusion'=>$sess['isExtrusion'],'width'=>$sess['sizeWidth'],'height'=>$sess['sizeHeight'],'quantity'=>$sess['quantity'],'file'=>$data['image'],'status'=>'b001','note'=>$post['note'],'unit'=>1);
 
 		if($id = $this->M_bill->insert_bill($bill['bill'])){
 		$data['bill'] = $this->M_bill->get_bill($id);

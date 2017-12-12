@@ -1,14 +1,5 @@
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Chỉnh sửa dự án</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Home</li>
-              <li class="active"><a href="<?php echo base_url().'admin/admin/view_admin/project'?>">Project</a></li>
-            </ul>
-          </div>
-        </div>
+        
         <?php if($ms=$this->session->userdata('error')){ ?>
           <div class="alert alert-danger" id="scs-msg" >
           <strong><?php echo $ms; ?></strong>
@@ -42,7 +33,7 @@
                                     <div class="col-sm-6">
                                          <input type="text" name="name_customer" value="<?php echo $project[0]['customer'] ?>" class="form-control" placeholder="Tên khách hàng" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnCustomer"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnCustomer"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="customer" style="display: none;">
                                     <input type="hidden" id="statusCustomer" value="0">
@@ -91,27 +82,55 @@
                                     <div class="col-sm-6">
                                         <input type="hidden" id="statusDonhang" value="0" class="form-control" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnDonhang"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnDonhang"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="donhang" style="display: none;">
                                   <div class="form-group">
                                     <label class="col-sm-3 control-label"></label>
                                     <div class="col-sm-6">
-                                         <input type="text" name="so_luong" value="<?php echo  number_format($donhang['quantity']) ?>" class="form-control so" >
+                                         <input type="text" name="so_luong" value="<?php echo(
+                                          $donhang['quantity'])?>" class="form-control so" >
                                     </div>
                                     <span>*Số lượng</span>
                                   </div>
                                   <div class="form-group">
                                     <label class="col-sm-3 control-label"></label>
                                     <div class="col-sm-6">
-                                         <input type="text" name="donvi" value="<?php echo $donhang['unit'] ?>" class="form-control" >
+                                         <input type="text" name="donvi"  class="form-control" value="<?php echo(
+                                          $donhang['unit'])?>">
                                     </div>
                                     <span>*Đơn vị tính</span>
                                   </div>
                                   <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                         <input type="text" name="status_thu_tien"  class="form-control" value="<?php echo(
+                                          $doanhthu['status_thu_tien'])?>">
+                                    </div>
+                                    <span>*Tình trạng thu tiền</span>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                        <select required="" class="form-control" name="phieu_thu">
+                                          <option value="<?php echo($doanhthu['phieu_thu'])?>"><?php echo($doanhthu['phieu_thu'])?></option>
+                                          <option value="Hóa đơn">Hóa đơn</option>
+                                          <option value="Phiếu thu">Phiếu thu</option>
+                                        </select>
+                                    </div>
+                                    <span>*Hình thức thu tiền</span>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                         <input required="" type="text" name="file_thietke"  class="form-control" value="<?php echo($project[0]['file_thiet_ke'])?>">
+                                    </div>
+                                    <span>*File thiết kế</span>
+                                  </div>
+                                  <div class="form-group">
                                       <label class="col-sm-3 control-label"></label>
                                       <div class="col-sm-6">
-                                           <textarea name="note_donhang" value="" class="form-control" placeholder="Ghi chú" ><?php echo $donhang['note'] ?></textarea>
+                                           <textarea name="note_donhang" value="" class="form-control" placeholder="Ghi chú" ><?php echo($doanhthu['ghi_chu'])?></textarea>
                                       </div>
                                       <span>*Ghi chú đơn hàng</span>
                                   </div>
@@ -121,21 +140,28 @@
                                     <div class="col-sm-6">
                                         <input type="text" name="doanhthu" value="<?php echo number_format($project[0]['tong_doanhthu']) ?>" class="form-control so" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnDoanhthu"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnDoanhthu"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="doanhthu" style="display: none;">
                                   <input type="hidden" id="statusDoanhthu" value="0">
                                   <div class="form-group">
                                     <label class="col-sm-3 control-label"></label>
                                     <div class="col-sm-6">
-                                         <input type="text" name="tam_ung" value="<?php echo number_format($doanhthu['tam_ung']) ?>" class="form-control so" >
+                                         <input type="text" name="tam_ung" value="<?php echo($doanhthu['tam_ung'])?>" class="form-control so" >
                                     </div>
                                     <span>*Tạm ứng</span>
                                   </div>
                                   <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                         <input type="date" name="ngay_tam_ung" value="<?php echo($doanhthu['ngay_tam_ung'])?>" class="form-control so" >
+                                    </div>
+                                    <span>*Ngày tạm ứng</span>
+                                  </div>
+                                  <div class="form-group">
                                       <label class="col-sm-3 control-label"></label>
                                       <div class="col-sm-6">
-                                           <textarea name="note_doanhthu" value="" class="form-control"  ><?php echo $doanhthu['ghi_chu'] ?></textarea>
+                                           <textarea name="note_doanhthu" value="" class="form-control" placeholder="Ghi chú" ><?php echo($doanhthu['ghi_chu'])?></textarea>
                                       </div>
                                   </div>
                                 </div>
@@ -143,37 +169,37 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Chi phí</label>
                                     <div class="col-sm-6">
-                                         <input type="text" readonly="" id="tong_chiphi" name="chiphi" class="form-control" value="<?php echo number_format($project[0]['tong_chiphi']) ?>" >
+                                         <input type="text" readonly="" id="tong_chiphi" name="chiphi" value="" class="form-control" value="0" >
                                     </div>
-                                    <button class="btn btn-primary" id="btnChiphi"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-primary" id="btnChiphi"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="chiphi" style="display: none;">
                                     <input type="hidden" id="statusChiphi" value="0">
                                     <div class="form-group">
                                       <label class="col-sm-3 control-label"></label>
                                       <div class="col-sm-6">
-                                         <input type="text" readonly="" value="<?php echo number_format($chiphi['chiphi_giay']) ?>" name="chiphi_giay" id="chiphi_giay" class="form-control" >
+                                         <input type="text" readonly="" value="<?php echo($chiphi['chiphi_giay'])?>" name="chiphi_giay" id="chiphi_giay" class="form-control" >
                                       </div>
                                       <span>*Chi phí giấy</span>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label"></label>
                                         <div class="col-sm-6">
-                                             <input type="text" value="<?php echo number_format($chiphi['chiphi_inngoai']) ?>" name="chiphi_inngoai" id="chiphi_inngoai" class="form-control so"  >
+                                             <input type="text" value="<?php echo($chiphi['chiphi_inngoai'])?>" name="chiphi_inngoai" id="chiphi_inngoai" class="form-control so"  >
                                         </div>
                                         <span>*Chi phí in ngoài</span>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label"></label>
                                         <div class="col-sm-6">
-                                             <input type="text" value="<?php echo number_format($chiphi['chiphi_giacong']) ?>" name="chiphi_giacong" id="chiphi_giacong" class="form-control so"  >
+                                             <input type="text" value="<?php echo($chiphi['chiphi_giacong'])?>" name="chiphi_giacong" id="chiphi_giacong" class="form-control so"  >
                                         </div>
                                         <span>*Chi phí gia công</span>
                                     </div>
                                      <div class="form-group">
                                         <label class="col-sm-3 control-label"></label>
                                         <div class="col-sm-6">
-                                             <input type="text" name="chiphi_giaohang" value="<?php echo number_format($chiphi['chiphi_giaohang']) ?>" id="chiphi_giaohang" class="form-control so"  >
+                                             <input type="text" name="chiphi_giaohang" value="<?php echo($chiphi['chiphi_giaohang'])?>" id="chiphi_giaohang" class="form-control so"  >
                                         </div>
                                         <span>*Chi phí giao hàng</span>
                                     </div>
@@ -187,7 +213,7 @@
                                 </div>
                                 <div class="form-group">
                                   <div style="margin: 0px 45%;">
-                                    <button type="submit" class="button submit-button btn btn-info btn-lg glyphicon glyphicon-floppy-save saveEdit" style="border-radius: 10px; ">Save</button>
+                                    <button type="submit" class="button submit-button btn btn-info btn-md glyphicon glyphicon-floppy-save saveEdit" style="border-radius: 10px; ">Save</button>
                                   </div>
                                 </div>
                             </form>

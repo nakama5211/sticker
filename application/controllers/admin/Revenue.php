@@ -25,6 +25,7 @@ class Revenue extends CI_Controller{
 
     function update_data_revenue(){
         $frm = $this->input->post();
+        // var_dump($frm);
         $id_project = $frm['id_project'];
         unset($frm['id_project']);
         $match['project'] = array(
@@ -32,8 +33,8 @@ class Revenue extends CI_Controller{
             'project.hidden'=>0
         );
         $project = $this->M_project->get_row($match['project']);
-        if($project[0]['thongtin_chiphi']){
-            $list_revenue = json_decode($project[0]['thongtin_chiphi'],true);
+        if($project[0]['thongtin_doanhthu']){
+            $list_revenue = json_decode($project[0]['thongtin_doanhthu'],true);
             foreach ($list_revenue as $key => $value) {
                 if(isset($frm[$key])){
                     $list_revenue[$key] = $frm[$key];
@@ -42,7 +43,33 @@ class Revenue extends CI_Controller{
         }
         $new_data['project'] = array(
             'thongtin_doanhthu'=>json_encode($list_revenue)
-        )
+        );
+        $this->M_data->update($match['project'],$new_data['project'],'project');
+        $data['success'] = "thành công.";
+        echo json_encode($data);
+    }
+
+    function update_data_cost(){
+        $frm = $this->input->post();
+        // var_dump($frm);
+        $id_project = $frm['id_project'];
+        unset($frm['id_project']);
+        $match['project'] = array(
+            'project.id'=>$id_project,
+            'project.hidden'=>0
+        );
+        $project = $this->M_project->get_row($match['project']);
+        if($project[0]['thongtin_chiphi']){
+            $list_cost = json_decode($project[0]['thongtin_chiphi'],true);
+            foreach ($list_cost as $key => $value) {
+                if(isset($frm[$key])){
+                    $list_cost[$key] = $frm[$key];
+                }
+            }
+        }
+        $new_data['project'] = array(
+            'thongtin_chiphi'=>json_encode($list_cost)
+        );
         $this->M_data->update($match['project'],$new_data['project'],'project');
         $data['success'] = "thành công.";
         echo json_encode($data);

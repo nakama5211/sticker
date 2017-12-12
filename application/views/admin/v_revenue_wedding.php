@@ -19,7 +19,7 @@
             <div class="card">
               <div class="card-body ">
                 <div class="col-md-11">
-                  <button class="btn btn-success btn-lg" id="dropbtn" title="Lọc dự án"><i class="fa fa-filter" aria-hidden="true"></i></button>
+                  <button class="btn btn-success btn-sm" id="dropbtn" title="Lọc dự án"><i class="fa fa-filter" aria-hidden="true"></i></button>
                   <div class="dropdown-content">
                     <form class="form-horizontal" method="post" action="<?php echo base_url() ?>admin/admin/filterRevenue">
                       <input type="hidden" id="statusDrop" value="0">
@@ -64,7 +64,7 @@
                 </div>
                   
                   <div>
-                    <a class="btn btn-primary btn-lg glyphicon glyphicon-plus" href="<?php echo base_url() ?>admin/admin/pageNewProject" title="Thêm dự án mới"></a>
+                    <a class="btn btn-primary btn-sm glyphicon glyphicon-plus" href="<?php echo base_url() ?>admin/admin/pageNewProject" title="Thêm dự án mới"></a>
                   </div>
                   
               </div>
@@ -75,10 +75,10 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
-                <table class="stripe row-border order-column" id="sampleTable">
+                <table class="stripe row-border order-column" width="100%" id="sampleTable">
                   <thead>
                     <tr class="text-center">
-                      <th></th>
+                      <th class="col-data-table-0-1"></th>
                       <th class="col-data-table-0-9">Mã đơn hàng</th>
                       <th class="col-data-table-0-7">Ngày/Tháng/Năm</th>
                       <th class="col-data-table-2">Tên CR-CD</th>
@@ -124,8 +124,8 @@
                       <td>
                   
                         <?php 
-                        echo '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')"></button>';
-                        echo '<button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="cancelRow('. $row['id'] .')"></button>';
+                        echo '<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')"></button>';
+                        echo '<button class="btn btn-warning btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="cancelRow('. $row['id'] .')"></button>';
                         ?>
                       </td>
                     </tr>

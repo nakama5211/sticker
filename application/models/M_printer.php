@@ -14,7 +14,7 @@ class M_printer extends CI_Model
                 project.thongtin_khachhang,
         	')
             ->from('printer')
-            ->join('users','users.id = printer.id_user')
+            ->join('users','users.id = printer.id_user','left')
             ->join('project','project.id = printer.id_project','left')
             ->where($match)
         	->order_by('id','desc');

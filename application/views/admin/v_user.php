@@ -3,25 +3,16 @@
   else{
                 ?>
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Quản lý thành viên</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Quản lý thành viên</a></li>
-            </ul>
-          </div>
-        </div>
+        <h3 style="margin-top: -15px; margin-bottom: 10px;">Quản lý nhân viên</h3>
         <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-body ">
                 <div class="col-md-11">
-                  <!-- <button class="btn btn-success btn-lg" id="dropbtn" title="Lọc dự án"><i class="fa fa-filter" aria-hidden="true"></i></button> -->
+                  <!-- <button class="btn btn-success btn-sm" id="dropbtn" title="Lọc dự án"><i class="fa fa-filter" aria-hidden="true"></i></button> -->
                 </div>
                 <div>
-                  <button class="btn btn-primary btn-lg glyphicon glyphicon-plus" data-toggle="modal" data-target="#addUser" title="Thêm thành viên mới"></button>
+                  <button class="btn btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="modal" data-target="#addUser" title="Thêm thành viên mới"></button>
                 </div>
               </div>
             </div>
@@ -31,7 +22,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
-                <table class=" astripe row-border order-column" id="sampleTable">
+                <table class=" astripe row-border order-column" width="100%" id="sampleTable">
                   <thead>
                     <tr style="text-align: center;">
                       <th></th>
@@ -53,11 +44,10 @@
                                 <td id="group_<?php echo $row['id']?>"><?php echo $depar['name']?></td>
                       <?php } } ?>
                       <td>
-                        <?php 
-                          echo '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
-                              </button>';
-                        ?>
-                        <button class="btn btn-danger btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow(<?php echo $row['id'] ?>)"></button>
+                        
+                        <button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id']; ?>')"></button>
+                        <button class="btn btn-danger btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow(<?php echo $row['id'] ?>)"></button>
+                        <a class="btn btn-success btn-sm" style="border-radius: 10px;" href="<?=base_url()?>admin/users/view_user/<?php echo $row['id'] ?>">Xem công việc</a>
                   	  </td>
                     </tr>
                   	<?php
@@ -201,7 +191,7 @@ $('#add').on('click',function(){
               row.push('<td><img src="'+avatar+'" style="width: 100px;height: 100px"></td>');
               row.push('<td>'+username+'</td>');
               row.push('<td>'+group+'</td>');
-              row.push('<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" data-toggle="modal" data-target="#editUser" data-id='+data+'></button><button class="btn btn-danger btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow('+data+')"></button>');
+              row.push('<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" data-toggle="modal" data-target="#editUser" data-id='+data+'></button><button class="btn btn-danger btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow('+data+')"></button>');
               
               var rowIndex = $('#sampleTable').dataTable().fnAddData(row);
               var idrow =   $('#sampleTable').dataTable().fnGetNodes(rowIndex);
@@ -226,6 +216,7 @@ function editRow(id_user){
     }
   });
 }
+
 function editFormUser(){
   var route = '<?=base_url()?>admin/users/updateUser';
   var frm = new FormData($('form#edit-form')[0]);
@@ -247,7 +238,7 @@ function editFormUser(){
           row.push('<td><img src="'+avatar+'" style="width: 100px;height: 100px"></td>');
           row.push('<td>'+username+'</td>');
           row.push('<td>'+group+'</td>');
-          row.push('<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" data-toggle="modal" data-target="#editUser" data-id='+id+'></button><button class="btn btn-danger btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow('+id+')"></button>');
+          row.push('<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" data-toggle="modal" data-target="#editUser" data-id='+id+'></button><button class="btn btn-danger btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="deleteRow('+id+')"></button>');
           
           var rowIndex = $('#sampleTable').dataTable().fnAddData(row);
           var idrow =   $('#sampleTable').dataTable().fnGetNodes(rowIndex);
@@ -260,7 +251,7 @@ function editFormUser(){
   });
 }
 
- function deleteRow(id)
+function deleteRow(id)
     {
       
       ssi_modal.confirm({
@@ -292,4 +283,18 @@ function editFormUser(){
         }
       );
     }
+function viewTask(id_user){
+  var route = '<?=base_url()?>admin/users/view_user/';
+  $.ajax({
+    url: route,
+    type:'post',
+    dataType:'json',
+    data:{
+      id_user:id_user
+    },
+    success:function(){
+      window.location.replace = route;
+    }
+  });
+}
 </script>

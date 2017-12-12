@@ -54,8 +54,8 @@ class M_bill extends CI_Model
             status.name as status_name,
             ')
                 ->from('bill')
-                ->join('status','status.id = bill.status')
-                ->join('unit','unit.id = bill.unit')
+                ->join('status','status.id = bill.status','left')
+                ->join('unit','unit.id = bill.unit','left')
                 ->join('customer','bill.id_customer = customer.id')
                 ->join('typedecal', 'bill.id_typedecal = typedecal.id')
                 ->join('extrusion', 'bill.id_extrusion = extrusion.id')
@@ -99,11 +99,12 @@ class M_bill extends CI_Model
     }
 
     function get_bill($id){
-    	$this->db->select('bill.*,customer.name as customer,customer.email as email,customer.phone as phone,customer.address as address,typedecal.id as typedecal,typedecal.price as typedecal_price,extrusion.price as extrusion_price,extrusion.id as extrusion,extrusion.name as extrusion_name,typedecal.name as typedecal_name')
+    	$this->db->select('bill.*,customer.name as customer,customer.email as email,customer.phone as phone,customer.address as address,typedecal.id as typedecal,typedecal.price as typedecal_price,extrusion.price as extrusion_price,extrusion.id as extrusion,extrusion.name as extrusion_name,typedecal.name as typedecal_name,unit.name as unit_name')
         		->from('bill')
                 ->join('customer','bill.id_customer = customer.id')
         		->join('typedecal', 'bill.id_typedecal = typedecal.id')
         		->join('extrusion', 'bill.id_extrusion = extrusion.id')
+                ->join('unit','unit.id = bill.unit','left')
         		->where(['bill.id'=>$id,'bill.hidden'=>0]);
         $query = $this->db->get();
         return $query->result_array();

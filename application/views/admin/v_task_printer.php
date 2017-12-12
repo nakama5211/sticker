@@ -4,16 +4,7 @@
 else{
                 ?> 
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Data Table</a></li>
-            </ul>
-          </div>
-        </div>
+        <h3 style="margin-top: -15px; margin-bottom: 10px;">Bộ phận in ấn - Danh sách công việc</h3>
         <?php if($ms=$this->session->userdata('success')){ ?>
           <div class="alert alert-success" id="scs-msg" >
           <strong><?php echo $ms; $this->session->unset_userdata('success');?></strong>
@@ -28,13 +19,13 @@ else{
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
-                <button class="btn btn-success btn-lg" id="dropbtn" title="Lọc dự án"><i class="fa fa-bell-o fa-lg" aria-hidden="true"></i><span class="badge badge-notify" style="margin-top: -20px; margin-right: -15px; margin-left: -8px; background: red; color: white;"><?php echo isset($newtask)?count($newtask):'0'?></span></button>
+                <button class="btn btn-success btn-sm" id="dropbtn" title="Lọc dự án"><i class="fa fa-bell-o fa-lg" aria-hidden="true"></i><span class="badge badge-notify" style="margin-top: -20px; margin-right: -15px; margin-left: -8px; background: red; color: white;"><?php echo isset($newtask)?count($newtask):'0'?></span></button>
                   <div class="dropdown-content" style="width: 97%; border-radius:10px;">
                     <form class="form-horizontal" method="post" action="">
                       <input type="hidden" id="statusDrop" value="0">
                       <br>
                       <div class="widget-content nopadding">
-                        <ul class="recent-posts" id="new-notif">
+                        <ul class="recent-posts" id="new-notif" style="width: 100%;">
                           <?php 
                             if (!isset($newtask)) {
                               echo('<li>không có thông báo nào mới!</li>');
@@ -61,10 +52,10 @@ else{
                   <div id="external_filter_container" style="float: right; margin-right: 37%;"></div>
                 </div>
                   <hr>
-                <table class="stripe row-border order-column" id="sampleTable">
+                <table class="stripe row-border order-column" width="100%" id="sampleTable">
                   <thead>
                     <tr style="text-align: center;">
-                      <th></th>
+                      <th class="col-data-table-0-1"></th>
                       <th class="col-data-table-0-7">Mã bài in</th>
                       <th class="col-data-table-0-8">Máy in</th>
                       <th class="col-data-table-1-1">Ngày nhận task</th>
@@ -119,12 +110,12 @@ else{
                       <?php 
                       if($row['task_status'] != 't003'){ 
                       ?>
-                        <button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id_project']?>')">
+                        <button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id_project']?>')">
                               </button>
                       <?php } 
                       if($row['tong_so_giay_in_su_dung'] != '' && $row['task_status'] != 't003'){
                       ?> 
-                        <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="doneTask('<?php echo $row['id_task']?>','<?php echo($this->session->userdata('group'))?>')">Hoàn tất
+                        <button class="btn btn-danger btn-sm" style="border-radius: 10px;" onclick="doneTask('<?php echo $row['id_task']?>','<?php echo($this->session->userdata('group'))?>')">Hoàn tất
                         </button>
                       <?php }?>
                       </td>

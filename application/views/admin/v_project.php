@@ -4,16 +4,9 @@
   else{
                 ?> 
 <div class="content-wrapper">
-        <div class="page-title">
-          <div>
-            <h1>Quản lý dự án</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Bộ phận kinh doanh</li>
-              <li class="active"><a href="#">Quản lý dự án</a></li>
-            </ul>
-          </div>
-        </div>
+    
+        <h3 style="margin-top: -15px; margin-bottom: 10px;">Quản lý dự án</h3>
+      
         <?php if($ms=$this->session->userdata('success')){ ?>
           <div class="alert alert-success" id="scs-msg" >
           <strong><?php echo $ms; $this->session->unset_userdata('success');?></strong>
@@ -29,7 +22,7 @@
             <div class="card">
               <div class="card-body ">
                 <div class="col-md-11">
-                  <button class="btn btn-success btn-lg" id="dropbtn" title="Lọc dự án"><i class="fa fa-filter" aria-hidden="true"></i></button>
+                  <button class="btn btn-success btn-sm" id="dropbtn" title="Lọc dự án"><i class="fa fa-filter" aria-hidden="true"></i></button>
                   <div class="dropdown-content">
                     <form class="form-horizontal" method="post" action="<?php echo base_url() ?>admin/admin/filterProject">
                       <input type="hidden" id="statusDrop" value="0">
@@ -89,7 +82,7 @@
                 </div>
                   
                   <div>
-                    <a class="btn btn-primary btn-lg glyphicon glyphicon-plus" href="<?php echo base_url() ?>admin/admin/pageNewProject" title="Thêm dự án mới"></a>
+                    <a class="btn btn-primary btn-sm glyphicon glyphicon-plus" href="<?php echo base_url() ?>admin/admin/pageNewProject" title="Thêm dự án mới"></a>
                   </div>
                   
               </div>
@@ -103,7 +96,7 @@
                 <table class="stripe row-border order-column" cellspacing="0" width="100%" id="sampleTable">
                   <thead>
                     <tr class="text-center">
-                      <th></th>
+                      <th class="col-data-table-0-1"></th>
                       <th class="col-data-table-0-7">Mã dự án</th>
                       <th class="col-data-table-1-5">Tên dự án</th>
                       <th class="col-data-table-1-4">Khách hàng</th>
@@ -145,22 +138,22 @@
                       if($row['status'] != 'p405' && $this->session->userdata('group')==1){ 
                       ?>
                       <td id="button_<?php echo $row['id']?>">
-                        <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="onCreateTask('<?php echo $row['id'] ?>')">Phân công việc
+                        <button class="btn btn-success btn-sm" style="border-radius: 10px;" onclick="onCreateTask('<?php echo $row['id'] ?>')">Phân công việc
                         </button> 
-                        <button class="btn btn-primary btn-lg" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id'] ?>')">Quy cách in
+                        <button class="btn btn-primary btn-sm" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id'] ?>')">Quy cách in
                         </button>
-                        <a class="btn btn-info btn-lg" style="border-radius: 10px;" href="<?php echo base_url().'editProject/'.$row['id'] ?>">Chỉnh sửa dự án
+                        <a class="btn btn-info btn-sm" style="border-radius: 10px;" href="<?php echo base_url().'editProject/'.$row['id'] ?>">Chỉnh sửa dự án
                         </a>
-                        <button class="btn btn-success btn-lg" style="border-radius: 10px;" onclick="updateStatus('<?php echo $row['id'] ?>')">Hoàn tất
+                        <button class="btn btn-success btn-sm" style="border-radius: 10px;" onclick="updateStatus('<?php echo $row['id'] ?>')">Hoàn tất
                         </button>
-                        <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
+                        <button class="btn btn-danger btn-sm" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
                         </button>
                   	  </td>
                     <?php }elseif($this->session->userdata('group')==1){ echo ''; ?>
                       <td>
-                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
+                         <button class="btn btn-danger btn-sm" style="border-radius: 10px;" onclick="viewProgress('<?php echo $row['id'] ?>')">Xem tiến độ
                         </button>
-                        <a class="btn btn-info btn-lg" style="border-radius: 10px;" href="<?php echo base_url().'admin/admin/exp_file/'.$row['id'] ?>">Xuất phiếu thu
+                        <a class="btn btn-info btn-sm" style="border-radius: 10px;" href="<?php echo base_url().'admin/admin/exp_file/'.$row['id'] ?>">Xuất phiếu thu
                         </a>
                       </td>
                     </tr>
@@ -168,7 +161,7 @@
                   	}else{ ?>
 
                     <td>
-                         <button class="btn btn-danger btn-lg" style="border-radius: 10px;" onclick="selectFile('<?php echo $row['id'] ?>')">Chốt file
+                         <button class="btn btn-danger btn-sm" style="border-radius: 10px;" onclick="selectFile('<?php echo $row['id'] ?>')">Chốt file
                         </button>
                       </td>
                       <?php 
@@ -318,6 +311,34 @@
                  <div class="container-fluid">
                     <div class="container">
                       <div class="[ col-xs-12 col-sm-6 ]" id="progress-view">
+                          
+                      </div>
+                  </div>
+                 </div>
+              </div>
+              <div class="modal-footer">
+                 <div class="form-group">
+                    <!-- <button type="button" class="btn btn-sm btn-info" onclick="createProject()"> Save <span class="glyphicon glyphicon-saved"></span></button>
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-default"> Cancel <span class="glyphicon glyphicon-remove"></span></button> -->
+                 </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+  <div class="modal fade" id="view-user-task">
+          <div class="modal-dialog">
+           <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss='modal' aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title" style="font-size: 20px; padding: 12px;"><b>Danh sách công việc của nhân viên:</b></h4>
+              </div>
+              <form method="post" id="user-task-form">
+              <div class="modal-body">
+                 <div class="container-fluid">
+                    <div class="container">
+                      <div class="[ col-xs-12 col-sm-6 ]" id="user-task-view">
                           
                       </div>
                   </div>
@@ -663,6 +684,20 @@ function delPaper(id,id_printer){
     },
     success:function(data){
       window.location.reload();
+    }
+  });
+}
+function viewUserTask(id){
+  $.ajax({
+    url:'<?=base_url()?>admin/task/view_user_task',
+    type:'post',
+    dataType:'json',
+    data:{
+      id_user:id
+    },
+    success:function(data){
+      $('#user-task-view').html(data.list_task);
+      $('#view-user-task').modal('show');
     }
   });
 }

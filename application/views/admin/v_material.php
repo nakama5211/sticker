@@ -5,18 +5,11 @@ else{
                 ?> 
 <div class="content-wrapper">
         <div class="page-title">
-          <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Data Table</a></li>
-            </ul>
-          </div>
+          <h3>Quản lý giấy</h3>
           <div>
           <?php 
             $btn = '';
-            $btn.= isset($button['add']) ? '<a class="btn btn-primary btn-primary" onclick="addRow()"><i class="fa fa-lg fa-plus"></i></a> ' : '';
+            $btn.= isset($button['add']) ? '<a class="btn btn-sm btn-primary btn-primary" onclick="addRow()"><i class="fa fa-lg fa-plus"></i></a> ' : '';
             echo $btn;
           ?>
           </div>
@@ -35,9 +28,9 @@ else{
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
-                <table class="stripe row-border order-column" id="sampleTable">
+                <table class="stripe row-border order-column" width="100%" id="sampleTable">
                   <thead>
-                    <tr style="text-align: center;">
+                    <tr>
                       <th></th>
                       <th class="col-data-table-0-2">ID</th>
                       <th class="col-data-table-0-8">Tên giấy</th>
@@ -70,9 +63,9 @@ else{
                       <td>
                   		<?php 
                         $btn = '';
-                        $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
+                        $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
                           </button> ' : '';
-                        $btn.= isset($button['delete']) ? '<button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="delRow('. $row['id'] .')">
+                        $btn.= isset($button['delete']) ? '<button class="btn btn-warning btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="delRow('. $row['id'] .')">
                           </button> ' : '';
                         echo $btn;
                         ?>
@@ -214,7 +207,7 @@ function subAddForm(){
         for (let [key, value] of Object.entries(data.response[0])) {
           row.push('<i id="'+key+data.response[0].id+'">'+value+'</i>');
         }
-        row.push('<button class="btn btn-primary btn-lg fa fa-pencil" style="border-radius: 10px;" onclick="editRow('+data.response[0].id+')"></button> <button class="btn btn-warning btn-lg fa fa-trash" style="border-radius: 10px;" onclick="delRow('+data.response[0].id+')"></button>');
+        row.push('<button class="btn btn-primary btn-sm fa fa-pencil" style="border-radius: 10px;" onclick="editRow('+data.response[0].id+')"></button> <button class="btn btn-warning btn-sm fa fa-trash" style="border-radius: 10px;" onclick="delRow('+data.response[0].id+')"></button>');
         $('#add-row').modal('hide');
         var rowIndex = $('#sampleTable').dataTable().fnAddData(row); 
         var irow = $('#sampleTable').dataTable().fnGetNodes(rowIndex);

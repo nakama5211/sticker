@@ -5,17 +5,8 @@ else{
                 ?> 
 <div class="content-wrapper">
         <div class="page-title">
-          <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Data Table</a></li>
-            </ul>
-          </div>
-          <div>
-          <a class="btn btn-primary btn-primary" onclick="addRow()"><i class="fa fa-lg fa-plus"></i></a>
-          </div>
+          <h3>Quản lý gia công</h3>
+          <a class="btn btn-sm btn-primary btn-primary" onclick="addRow()"><i class="fa fa-lg fa-plus"></i></a>
         </div>
         <?php if($ms=$this->session->userdata('success')){ ?>
           <div class="alert alert-success" id="scs-msg" >
@@ -54,9 +45,9 @@ else{
                       <td>
                   		<?php 
                         $btn = '';
-                        $btn.= '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
+                        $btn.= '<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
                           </button> ';
-                        $btn.= '<button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="delRow('. $row['id'] .')">
+                        $btn.= '<button class="btn btn-warning btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="delRow('. $row['id'] .')">
                           </button> ';
                         echo $btn;
                         ?>
@@ -199,7 +190,7 @@ function subAddForm(){
         for (let [key, value] of Object.entries(data.response[0])) {
           row.push('<i id="'+key+data.response[0].id+'">'+value+'</i>');
         }
-        row.push('<button class="btn btn-primary btn-lg fa fa-pencil" style="border-radius: 10px;" onclick="editRow('+data.response[0].id+')"></button> <button class="btn btn-warning btn-lg fa fa-trash" style="border-radius: 10px;" onclick="delRow('+data.response[0].id+')"></button>');
+        row.push('<button class="btn btn-primary btn-sm fa fa-pencil" style="border-radius: 10px;" onclick="editRow('+data.response[0].id+')"></button> <button class="btn btn-warning btn-sm fa fa-trash" style="border-radius: 10px;" onclick="delRow('+data.response[0].id+')"></button>');
         $('#add-row').modal('hide');
         var table = $('#sampleTable').dataTable();
         var rowIndex = table.fnAddData(row); 

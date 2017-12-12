@@ -57,6 +57,8 @@ class M_task extends CI_Model
     function get_task_by_match($match){
         $this->db->select('
             users.username,
+            users.id,
+            users.avatar,
 
             department.progress,
 
@@ -66,6 +68,27 @@ class M_task extends CI_Model
         ->join('users','users.id = task.id_user','left')
         ->join('department','department.id = users.group','left')
         ->join('project','project.id = task.id_project')
+        ->where($match);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function get_task_for_user($match){
+        $this->db->select('
+            users.username,
+
+            task.id_project,
+            task.get_at,
+            task.done_at,
+
+            department.name as depart_name,
+
+            status.name as status_name,
+        ')
+        ->from('task')
+        ->join('users','users.id = task.id_user','left')
+        ->join('department','department.id = users.group','left')
+        ->join('status','status.id = task.status')
         ->where($match);
         $query = $this->db->get();
         return $query->result_array();

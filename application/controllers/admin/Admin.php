@@ -375,82 +375,60 @@ class Admin extends CI_Controller{
 				}
 		        case'2':{
 		            $category['category'] = array(
-		            	'bill'=> array(
-		            		'name'=>'Đơn hàng',
-		            		'link'=>'admin/view_admin/bill',
+		            	'task'=> array(
+		            		'name'=>'My Task',
+		            		'link'=>'admin/view_admin/task',
 		            		'icon'=>'fa fa-object-group'
 		            	),
-		            	'revenue'=>array(
-		            		'type'=>'tree',
-		            		'name'=>'Quản lý Doanh thu',
-		            		'content'=>array(
-		            			'business'=>array(
-		            				'name'=>'Doanh nghiệp',
-		            				'link'=>'admin/view_admin/business'
-		            			),
-		            			'wedding'=>array(
-		            				'name'=>'Thiệp cưới',
-		            				'link'=>'admin/view_admin/wedding'
-		            			),
-		            		),
-		            		'icon'=>'fa fa-briefcase'),
-		            	'material'=>array(
-		            		'name'=>'Quản lý Giấy',
-		            		'link'=>'admin/view_admin/material',
-		            		'icon'=>'fa fa-database'
-		            	),
-		            );         
+		            ); 
 					switch ($view) {
-						case 'bill':
-							$match = array(
+						case 'task':
+							$match['newtask'] = array(
+								'task.hidden'=>0,
+								'task.status'=>'t001',
+								'task.id_user'=>$this->session->userdata('user_id'),
+							);
+							$match['oldtask'] = array(
+								'task.hidden'=>0,
+								'task.status!='=>'t001',
+								'task.id_user'=>$this->session->userdata('user_id'),
+							);
+							$match['project'] = array(
 								'task.hidden'=>0,
 								'task.id_user'=>$this->session->userdata('user_id'),
-								'task.status!='=>'t001',
 								'task.status!='=>'t004',
+								'task.status!='=>'t001',
 							);
-							$data['button'] = array(
-				            	'upfile'=> array(
-				            		'name'=>'Chốt file',
-				            		'icon'=>'fa fa-archive'
-				            	),
-				            );
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
-							$data['typeproject'] = $this->M_data->load_typeProject();
-							$data['classproject'] = $this->M_data->load_class();
-		            		$data['bill'] = $this->M_bill->load_my_task_bill($match);
-							$this->_data['html_body'] = $this->load->view('admin/v_bill',$data, TRUE);
-							break;
-						case 'business':
-							$match = array(
-								'id_typeproject'=>1,
-								'hidden'=>0
-							);
-							$category['active']['revenue'][0] = 'active';
-							$category['active']['revenue'][$view] = 'fa fa-circle-o';
-							$data['department'] = $this->M_department->load_all_department();
-		            		$data['revenue'] = $this->M_project->load_data_for_revenue($match);
-							$this->_data['html_body'] = $this->load->view('admin/v_revenue_business',$data, TRUE);
-							break;
-						case 'wedding':
-							$match = array(
-								'id_typeproject'=>2,
-								'hidden'=>0
-							);
-							$category['active']['revenue'][0] = 'active';
-							$category['active']['revenue'][$view] = 'fa fa-circle-o';
-							$data['department'] = $this->M_department->load_all_department();
-		            		$data['revenue'] = $this->M_revenue->load_data_for_view_wedding($match);
-							$this->_data['html_body'] = $this->load->view('admin/v_revenue_wedding',$data, TRUE);
-							break;
-						case 'material':
-							$match = array(
-								'project.hidden'=>0,
-							);
-							$category['active']['material'] = 'active';
-							$data['department'] = $this->M_department->load_all_department();
-		            		$data['material'] = $this->M_material->load_data();
-							$this->_data['html_body'] = $this->load->view('admin/v_material',$data, TRUE);
+		            		$data['newtask'] = $this->M_task->load_data($match['newtask']);
+		            		$data['oldtask'] = $this->M_task->load_data($match['oldtask']);
+		            		$data['revenue'] = [];
+		            		$revenue = $this->M_project->load_my_task_project_revenue($match['project']);
+		            		for($i=0; $i<count($revenue);$i++){
+		            			$data['revenue'][$i]['task_status'] = $revenue[$i]['task_status'];
+		            			$data['revenue'][$i]['get_at'] = $revenue[$i]['get_at'];
+		            			$data['revenue'][$i]['done_at'] = $revenue[$i]['done_at'];
+		            			$data['revenue'][$i]['status_name'] = $revenue[$i]['status_name'];
+								$data['revenue'][$i]['tong_chiphi'] = $revenue[$i]['tong_chiphi'];
+			            		$data['revenue'][$i]['id'] = $revenue[$i]['id'];
+			            		$data['revenue'][$i]['project_name'] = $revenue[$i]['project_name'];
+			            		$data['revenue'][$i]['created_at'] = $revenue[$i]['created_at'];
+			            		$data['revenue'][$i]['tong_doanhthu'] = $revenue[$i]['tong_doanhthu'];
+			            		foreach (json_decode($revenue[$i]['thongtin_chiphi'],true) as $key => $value) {
+			            			$data['revenue'][$i][$key] = $value;
+			            		}
+			            		foreach (json_decode($revenue[$i]['thongtin_doanhthu'],true) as $key => $value) {
+			            			$data['revenue'][$i][$key] = $value;
+			            		}
+			            		foreach (json_decode($revenue[$i]['thongtin_khachhang'],true) as $key => $value) {
+			            			$data['revenue'][$i][$key] = $value;
+			            		}
+			            		foreach (json_decode($revenue[$i]['thongtin_donhang'],true) as $key => $value) {
+			            			$data['revenue'][$i][$key] = $value;
+			            		}
+							}
+							$this->_data['html_body'] = $this->load->view('admin/v_task_revenue',$data, TRUE);
 							break;
 						default:
 							
@@ -462,7 +440,7 @@ class Admin extends CI_Controller{
 					$this->_data['html_footer'] = $this->load->view('admin/footer', NULL, TRUE);
 					// Load view method_one_view        
 					$this->load->view('admin/master', $this->_data);
-					// var_dump($data['revenue']);
+					//var_dump($data['project']);
 					break;
 		        }
 		        case'3':{
@@ -492,7 +470,6 @@ class Admin extends CI_Controller{
 								'task.status!='=>'t001',
 							);
 							$category['active'][$view] = 'active';
-							$data['department'] = $this->M_department->load_all_department();
 		            		$data['newtask'] = $this->M_task->load_data($match['newtask']);
 		            		$data['oldtask'] = $this->M_task->load_data($match['oldtask']);
 		            		$data['print'] = $this->M_printer->load_data_for_task_printer($match['printer']);
@@ -565,17 +542,6 @@ class Admin extends CI_Controller{
 					        }
 							$this->_data['html_body'] = $this->load->view('admin/v_task_printer',$data, TRUE);
 							break;
-						case 'print':
-							$match = array(
-								'task.hidden'=>0,
-								'task.status!='=>'t001',
-								'task.id_user'=>$this->session->userdata('user_id'),
-							);
-							$category['active'][$view] = 'active';
-							$data['department'] = $this->M_department->load_all_department();
-		            		$data['print'] = $this->M_printer->load_data($match);
-							$this->_data['html_body'] = $this->load->view('admin/v_print',$data, TRUE);
-							break;
 						default:
 							
 							break;
@@ -622,37 +588,69 @@ class Admin extends CI_Controller{
 		            		$data['project'] = $this->M_project->load_my_task_project_bill($match['project']);
 							$this->_data['html_body'] = $this->load->view('admin/v_task_design',$data, TRUE);
 							break;
-						case 'bill':
-							$match = array(
-								'task.hidden'=>0,
-								'task.id_user'=>$this->session->userdata('user_id'),
-								'task.status!='=>'t001',
-								'task.status!='=>'t004',
-							);
-							$data['button'] = array(
-				            	'upfile'=> array(
-				            		'name'=>'Chốt file',
-				            		'icon'=>'fa fa-archive'
-				            	),
-				            );
-							$category['active'][$view] = 'active';
-							$data['department'] = $this->M_department->load_all_department();
-							$data['typeproject'] = $this->M_data->load_typeProject();
-							$data['classproject'] = $this->M_data->load_class();
-		            		$data['bill'] = $this->M_bill->load_my_task_bill($match);
-							$this->_data['html_body'] = $this->load->view('admin/v_bill',$data, TRUE);
+						default:
+							
 							break;
-						case 'project':
-							$match = array(
+					}
+					// Load view header        
+					$this->_data['html_header'] = $this->load->view('admin/header', $category, TRUE);
+					// Load  footer       
+					$this->_data['html_footer'] = $this->load->view('admin/footer', NULL, TRUE);
+					// Load view method_one_view        
+					$this->load->view('admin/master', $this->_data);
+					//var_dump($data['project']);
+					break;
+		        }
+		        case'5':{
+		            $category['category'] = array(
+		            	'task'=> array(
+		            		'name'=>'My Task',
+		            		'link'=>'admin/view_admin/task',
+		            		'icon'=>'fa fa-object-group'
+		            	),
+		            ); 
+					switch ($view) {
+						case 'task':
+							$match['newtask'] = array(
+								'task.hidden'=>0,
+								'task.status'=>'t001',
+								'task.id_user'=>$this->session->userdata('user_id'),
+							);
+							$match['oldtask'] = array(
+								'task.hidden'=>0,
+								'task.status!='=>'t001',
+								'task.id_user'=>$this->session->userdata('user_id'),
+							);
+							$match['project'] = array(
 								'task.hidden'=>0,
 								'task.id_user'=>$this->session->userdata('user_id'),
 								'task.status!='=>'t004',
+								'task.status!='=>'t001',
 							);
 							$category['active'][$view] = 'active';
 							$data['department'] = $this->M_department->load_all_department();
-		            		$data['project'] = $this->M_project->load_my_task_project($match);
-		            		$data['classproject'] = $this->M_data->load_class();
-							$this->_data['html_body'] = $this->load->view('admin/v_project',$data, TRUE);
+		            		$data['newtask'] = $this->M_task->load_data($match['newtask']);
+		            		$data['oldtask'] = $this->M_task->load_data($match['oldtask']);
+		            		$data['project'] = [];
+		            		$project = $this->M_project->load_my_task_project_delivery($match['project']);
+		            		for($i=0; $i<count($project);$i++){
+		            			$data['project'][$i]['task_status'] = $project[$i]['task_status'];
+		            			$data['project'][$i]['get_at'] = $project[$i]['get_at'];
+		            			$data['project'][$i]['done_at'] = $project[$i]['done_at'];
+		            			$data['project'][$i]['status_name'] = $project[$i]['status_name'];
+								
+			            		$data['project'][$i]['id'] = $project[$i]['id'];
+			            		$data['project'][$i]['project_name'] = $project[$i]['project_name'];
+			            		$data['project'][$i]['created_at'] = $project[$i]['created_at'];
+			            		
+			            		foreach (json_decode($project[$i]['thongtin_khachhang'],true) as $key => $value) {
+			            			$data['project'][$i][$key] = $value;
+			            		}
+			            		foreach (json_decode($project[$i]['thongtin_donhang'],true) as $key => $value) {
+			            			$data['project'][$i][$key] = $value;
+			            		}
+							}
+							$this->_data['html_body'] = $this->load->view('admin/v_task_delivery',$data, TRUE);
 							break;
 						default:
 							
@@ -700,15 +698,8 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
+            		'link'=>'admin/view_admin/revenue',
             		'icon'=>'fa fa-briefcase'),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',
@@ -751,15 +742,8 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
+            		'link'=>'admin/view_admin/revenue',
             		'icon'=>'fa fa-briefcase'),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',
@@ -803,15 +787,8 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
+            		'link'=>'admin/view_admin/revenue',
             		'icon'=>'fa fa-briefcase'),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',
@@ -952,9 +929,9 @@ class Admin extends CI_Controller{
 		$this->M_bill->update_bill($id,$update);
 		$newstt = $this->M_status->get_status_name($status);
 		if($status=='b002'){
-			$data['button'] = '<button class="btn btn-info btn-lg glyphicon glyphicon-hand-right" style="border-radius: 10px;" onclick="checkRow('. $id .')">
-              	</button> <button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $id .')">
-              	</button> <button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="cancelRow('. $id .')">
+			$data['button'] = '<button class="btn btn-info btn-lg" style="border-radius: 10px;" onclick="checkRow('. $id .')">Tạo dự án
+              	</button> <button class="btn btn-primary btn-lg " style="border-radius: 10px;" onclick="editRow('. $id .')">Sửa
+              	</button> <button class="btn btn-warning btn-lg" style="border-radius: 10px;" onclick="cancelRow('. $id .')">Xóa
               	</button> ';
 		}
 		$data['status'] = $newstt[0]['name'];
@@ -1228,32 +1205,66 @@ class Admin extends CI_Controller{
 		   	$file_recent = fopen("./files/project_record.txt", "a+");
 			fwrite($file_recent, ';'.$id_project);
 			fclose($file_recent);
-		   	$project = array(
-				'id'=>$id_project,
-				'id_typeproject'=>$post['type_project'],
-				'id_bill'=>$post['id'],
-				'class'=>$class,
-				'status'=>'0',
-				'contact_by'=>$post['contact_by'],
-				'dead_line'=>$post['dead_line'],
-				'revenue'=>($bill[0]['typedecal_price']+$bill[0]['extrusion_price'])*$bill[0]['quantity'],
-				'cost'=>'0',
+
+			$chiphi = array(
+				'chiphi_giay' 		=> '0',
+				'chiphi_inngoai' 	=> '0',
+				'chiphi_giacong' 	=> '0',
+				'chiphi_giaohang' 	=> '0',
 			);
-			if($this->M_project->insert_row($project)){
-				$match = array(
-					'id_project'=>$id_project,
-				);
-				$this->M_cost->insert($match);
-				$this->M_revenue->insert($match);
-				$this->M_bill->update_bill($post['id'],array('status'=>'b003'));
-				$newstt = $this->M_status->get_status_name('b003');
-				$data['button'] = '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $post['id'] .')">
-	                              </button> ';
-				$data['status'] = $newstt[0]['name'];
-				$data['success'] = 'Thành công!';
-			}else{
-				$data['error'] = 'Thất bại!';
-			}
+
+			$doanhthu = array(
+					'doanhthu_thietke' 	=> '0',
+					'tam_ung' 			=> '0',
+					'ngay_tam_ung' 		=> '0',
+					'status_thu_tien' 	=> 'chưa',
+					'phieu_thu' 		=> 'chưa',
+					'ghi_chu' 			=> '',
+			);
+
+			$khachhang = array(
+					'name' 				=> $bill[0]['customer'],
+					'email' 			=> $bill[0]['email'],
+					'phone' 			=> $bill[0]['phone'],
+					'address' 			=> $bill[0]['address'],
+			);
+
+			$donhang = array(
+					'quantity'			=> $bill[0]['quantity'],
+					'unit'				=> $bill[0]['unit_name'],
+					'note'				=> $bill[0]['note'],
+			);
+
+
+			$project = array(
+					'id'				=> $id_project,
+					'id_typeproject'	=> $post['type_project'],
+					'id_bill'			=> $post['id'],
+					'dead_line'			=> $post['dead_line'],
+					'project_name'		=> "Dự án".$post['id'],
+					'ma_khachhang'		=> $bill[0]['id_customer'],
+					'tong_chiphi'		=> '0',
+					'thongtin_chiphi'	=> json_encode($chiphi),
+					'tong_doanhthu'		=> ($bill[0]['typedecal_price']+$bill[0]['extrusion_price'])*$bill[0]['quantity'],
+					'thongtin_doanhthu' => json_encode($doanhthu),
+					'thongtin_khachhang'=> json_encode($khachhang),
+					'thongtin_donhang'	=> json_encode($donhang),
+					'file_thiet_ke'		=> $bill[0]['file'],
+			);
+		   	
+			$this->M_project->insert_row($project);
+			$match = array(
+				'id_project'=>$id_project,
+			);
+			$this->M_cost->insert($match);
+			$this->M_revenue->insert($match);
+			$this->M_bill->update_bill($post['id'],array('status'=>'b003'));
+			$this->M_printer->insert($match);
+			$newstt = $this->M_status->get_status_name('b003');
+			$data['button'] = '<button class="btn btn-primary btn-lg" style="border-radius: 10px;" onclick="editRow('. $post['id'] .')">Sửa
+                              </button> ';
+			$data['status'] = $newstt[0]['name'];
+			$data['success'] = 'Thành công!';
 		}else {
 			echo('File not found!');
 			$data['error'] = 'Thất bại!';
@@ -1330,15 +1341,8 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
+            		'link'=>'admin/view_admin/project',
             		'icon'=>'fa fa-briefcase'),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',
@@ -1375,14 +1379,14 @@ class Admin extends CI_Controller{
 		$id_project = $this->tao_id_project($post['id_typeProject']);
 
 		$chiphi = array(
-				'chiphi_giay' 		=> $this->unNumber_Format($post['chiphi_giay']),
-				'chiphi_inngoai' 	=> $this->unNumber_Format($post['chiphi_inngoai']),
-				'chiphi_giacong' 	=> $this->unNumber_Format($post['chiphi_giacong']),
-				'chiphi_giaohang' 	=> $this->unNumber_Format($post['chiphi_giaohang']),
+				'chiphi_giay' 		=> '0',
+				'chiphi_inngoai' 	=> '0',
+				'chiphi_giacong' 	=> '0',
+				'chiphi_giaohang' 	=> '0',
 		);
 
 		$doanhthu = array(
-				'doanhthu_thietke' 	=> $this->unNumber_Format($post['doanhthu_thietke']),
+				'doanhthu_thietke' 	=> $this->unNumber_Format($post['doanhthu']),
 				'tam_ung' 			=> $this->unNumber_Format($post['tam_ung']),
 				'ngay_tam_ung' 		=> $post['ngay_tam_ung'],
 				'status_thu_tien' 	=> $post['status_thu_tien'],
@@ -1425,29 +1429,16 @@ class Admin extends CI_Controller{
 
 		$print = array(
 				'id_project'		=> $id_project,
-				'id_user'			=> $this->session->userdata('user_id'),
-				'id_material'		=> $post['id_loaigiay'],
-				'outsource'			=> $post['id_giacong'],
-				'name'				=> $post['ten_mayin'],
-				'num_face'			=> $this->unNumber_Format($post['so_mat_in']),
-				'num_print'			=> $this->unNumber_Format($post['so_to_in']),
-				'num_test'			=> $this->unNumber_Format($post['so_to_test']),
-				'num_bad' 			=> $this->unNumber_Format($post['so_to_in_hu']),
-				'num_jam'			=> $this->unNumber_Format($post['so_to_ket']),
-				'num_reprint'		=> $this->unNumber_Format($post['in_lai']),
-				'note'				=> $post['note_in'],
-				'tong_so_giay_in_su_dung'	=> $this->unNumber_Format($post['tong_to_in']),
 		);
 
 		if (file_exists('./files/project_record.txt'))
 		{
-			if($this->M_project->insert_row($project)){
-				$this->M_printer->insert($print);
-				$file_recent = fopen("./files/project_record.txt", "a+");
-				fwrite($file_recent, ';'.$id_project);
-				fclose($file_recent);
-				redirect(base_url().'admin/admin/view_admin/project');
-			}
+			$this->M_project->insert_row($project);
+			$this->M_printer->insert($print);
+			$file_recent = fopen("./files/project_record.txt", "a+");
+			fwrite($file_recent, ';'.$id_project);
+			fclose($file_recent);
+			redirect(base_url().'admin/admin/view_admin/project');
 		}else{
 			echo('File not found!');
 		}
@@ -1521,7 +1512,7 @@ class Admin extends CI_Controller{
 		);
 
 		$doanhthu = array(
-				'doanhthu_thietke' 	=> $this->unNumber_Format($post['doanhthu_thietke']),
+				'doanhthu_thietke' 	=> $this->unNumber_Format($post['doanhthu']),
 				'tam_ung' 			=> $this->unNumber_Format($post['tam_ung']),
 				'ngay_tam_ung' 		=> $post['ngay_tam_ung'],
 				'status_thu_tien' 	=> $post['status_thu_tien'],
@@ -1591,8 +1582,8 @@ class Admin extends CI_Controller{
 			'project.hidden'=>0,
 			'project.status'=>$post['status'],
 			'id_typeproject'=>$post['typeProject'],
-			'dead_line >='=>$post['start'],
-			'dead_line <='=>$post['end']
+			'project.created_at >='=>$post['start'],
+			'project.created_at <='=>$post['end']
 		);
 
 		if ($post['status']==0) {
@@ -1602,6 +1593,7 @@ class Admin extends CI_Controller{
 			unset($match['id_typeproject']);
 		}
 		
+		$category['active']['project'] = 'active';
 		$data['project'] = $this->M_project->load_project_by_filter($match);
 		$data['typeproject'] = $this->M_data->load_typeProject();
 		$data['status'] = $this->M_status->load_status_by_type('project');
@@ -1677,8 +1669,7 @@ class Admin extends CI_Controller{
     			$data['revenue'][$i][$key] = $value;
     		}
 		}
-		$category['active']['revenue'][0] = 'active';
-		$category['active']['revenue']['business'] = 'fa fa-circle-o';
+		$category['active']['revenue'] = 'active';
 		$data['status'] = $this->M_status->load_status_by_type('project');
 		$data['typeproject'] = $this->M_data->load_typeProject();
 		$category['category'] = array(
@@ -1693,15 +1684,8 @@ class Admin extends CI_Controller{
             		'icon'=>'fa fa-archive'
             	),
             	'revenue'=>array(
-            		'type'=>'tree',
             		'name'=>'Quản lý Doanh thu',
-            		'content'=>array(
-            			'business'=>array(
-            				'name'=>'Doanh nghiệp',
-            				'link'=>'admin/view_admin/business'
-            			),
-            			
-            		),
+            		'link'=>'admin/view_admin/revenue',
             		'icon'=>'fa fa-briefcase'),
             	'material'=>array(
             		'name'=>'Quản lý Giấy',

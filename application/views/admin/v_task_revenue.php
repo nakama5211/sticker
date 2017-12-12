@@ -1,91 +1,67 @@
+
 <?php if(!$this->session->userdata('user_id'))
   echo "<div style='margin-left:500px; margin-top: 300px;'><h1>Bạn chưa đăng nhập</h1></div>";
-  else{
-                ?>
+else{
+                ?> 
 <div class="content-wrapper">
-        <h3 style="margin-top: -15px; margin-bottom: 10px;">Quản lý doanh thu</h3>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body ">
-                <div class="col-md-11">
-                  <button class="btn btn-success btn-sm" id="dropbtn" title="Lọc doanh thu"><i class="fa fa-filter" aria-hidden="true"></i></button>
-                  <div class="dropdown-content">
-                    <form class="form-horizontal" method="post" action="<?php echo base_url() ?>admin/admin/filterRevenue">
-                      <input type="hidden" id="statusDrop" value="0">
-                      <br>
-                       <div class="form-group ">
-                        <label class="col-sm-4 control-label">Loại dự án</label>
-                        <div class="col-sm-7">
-                          <select class="form-control" name="typeProject" required="">
-                            <option selected value="0">Tất cả</option>
-                            <?php
-                            if(!$typeproject) echo "<option value='0'>Empty</option>";
-                            else{
-                              foreach ($typeproject as $typePro) {
-                                echo "<option value=".$typePro['id'].">".$typePro['name']."</option>";
-                              }
-                            }
-                            ?>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group ">
-                        <label class="col-sm-4 control-label">Tình trạng</label>
-                        <div class="col-sm-7">
-                          <select class="form-control" name="status" required="">
-                            <option selected value="0">Tất cả</option>
-                            <?php
-                            if(!$status) echo "<option value='0'>Empty</option>";
-                            else{
-                              foreach ($status as $stt) {
-                                echo "<option value=".$stt['id'].">".$stt['name']."</option>";
-                              }
-                            }
-                            ?>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group ">
-                        <label class="col-sm-4 control-label">Từ ngày</label>
-                        <div class="col-sm-7">
-                          <input type="date" class="form-control" name="start" required="" id="date-from-picker" value="">
-                        </div>
-                      </div>
-                      <div class="form-group ">
-                        <label class="col-sm-4 control-label">Đến ngày</label>
-                        <div class="col-sm-7">
-                          <input type="date" class="form-control" name="end" required="" id="date-to-picker" value="">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div style="margin-left: 35%;">
-                          <button type="submit" class="btn btn-success">Lọc</button> 
-                          <a class="btn btn-info" href="<?php echo base_url() ?>admin/admin/view_admin/revenue">Tất cả</a> 
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                  
-                  <div>
-                    <a class="btn btn-primary btn-sm glyphicon glyphicon-plus" href="<?php echo base_url() ?>admin/admin/pageNewProject" title="Thêm dự án mới"></a>
-                  </div>
-                  
-              </div>
-            </div>
-          </div>  
-        </div>
+        <h3 style="margin-top: -15px; margin-bottom: 10px;">Bộ phận kế toán - Danh sách công việc</h3>
+        <?php if($ms=$this->session->userdata('success')){ ?>
+          <div class="alert alert-success" id="scs-msg" >
+          <strong><?php echo $ms; $this->session->unset_userdata('success');?></strong>
+          </div>
+          <script type="text/javascript">
+          $(document).ready(function() {
+            $('#scs-msg').fadeOut(2000); // 5 seconds x 1000 milisec = 5000 milisec
+          });
+          </script>
+        <?php } ?>
         <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
-                <table class="stripe row-border order-column" width="100%" id="sampleTable">
+                <button class="btn btn-success btn-sm" id="dropbtn" title="Lọc dự án"><i class="fa fa-bell-o fa-lg" aria-hidden="true"></i><span class="badge badge-notify" style="margin-top: -20px; margin-right: -15px; margin-left: -8px; background: red; color: white;"><?php echo isset($newtask)?count($newtask):'0'?></span></button>
+                  <div class="dropdown-content" style="width: 97%; border-radius:10px;">
+                    <form class="form-horizontal" method="post" action="">
+                      <input type="hidden" id="statusDrop" value="0">
+                      <br>
+                      <div class="widget-content nopadding">
+                        <ul class="recent-posts" id="new-notif">
+                          <?php 
+                            if (!isset($newtask)) {
+                              echo('<li>không có thông báo nào mới!</li>');
+                            }else{
+                            foreach ($newtask as $key => $value) { ?>
+                          <li id="notif_<?php echo $value['id']?>">
+                            <div class="user-thumb"> <img width="40" height="40" alt="User" src="<?php echo base_url().'upload/'.$value['file']?>"> </div>
+                            <div class="article-post">
+                              <div class="fr"><a href="#" class="btn btn-success btn-sm" onclick="acceptNotif('<?php echo $value['id'] ?>','<?php echo($this->session->userdata('group'))?>')">Chấp nhận</a> <a href="#" class="btn btn-danger btn-sm" onclick="deniedNotif('<?php echo $value['id'] ?>','<?php echo($this->session->userdata('group'))?>')">Từ chối</a></div>
+                              <span class="user-info"> Dự án: <?php echo $value['id_project']?> / Ngày: <?php echo date_format(date_create($value['created_at']),'Y-m-d');?> / Lúc: <?php echo date_format(date_create($value['created_at']),'H:i:s');?> </span>
+                              <p><a href="#">Nhân viên phòng in ấn nhận được thông báo này phải nhấn 'Chấp nhận' để tham gia vào dự án.</a> </p>
+                            </div>
+                          </li>
+                          <?php }} ?>
+                          <li>
+                            <button class="btn btn-warning btn-sm">Xem thêm</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </form>
+                  </div>
+                  <div id="external_filter_container_wrapper input-group" style="margin-bottom: 30px;">
+                  <label style="margin-top: 5px; margin-left: 36%">Lọc trạng thái:</label>
+                  <div id="external_filter_container" style="float: right; margin-right: 37%;"></div>
+                </div>
+                  <hr>
+                <table class="stripe row-border order-column" cellspacing="0" width="100%" id="sampleTable">
                   <thead>
                     <tr class="text-center">
                       <th class="col-data-table-0-1"></th>
-                      <th class="col-data-table-0-9">Mã đơn hàng</th>
+                      <th class="col-data-table-0-7">Mã dự án</th>
                       <th class="col-data-table-0-9">Khách hàng</th>
+                      <th class="col-data-table-1-1">Ngày nhận task</th>
+                      <th class="col-data-table-0-9">Ngày hoàn thành</th>
+                      <th class="col-data-table-1-2">Trạng thái task</th>
+                      
                       <th class="col-data-table-0-9">Doanh thu (VNĐ)</th>
                       <th class="col-data-table-0-9">Chi phí (VNĐ)</th>
                       <th class="col-data-table-0-9">Ngày tạo</th>
@@ -107,39 +83,17 @@
                       <th class="col-data-table-1-8">Thao tác</th>
                     </tr>
                   </thead>
-                  <tfoot>
-                    <tr class="text-center">
-                      <th></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-1-9"></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-0-7"></th>
-                      <th class="col-data-table-1-5"></th>
-                      <th class="col-data-table-1-7"></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-0-9"></th>
-                      <th class="col-data-table-1-2"></th>
-                      <th class="col-data-table-1-2"></th>
-                      <th class="col-data-table-0-7"></th>
-                      <th class="col-data-table-1-2"></th>
-                      <th class="col-data-table-1-5"></th>
-                      <th class="col-data-table-1-4"></th>
-                      <th class="col-data-table-1-4"></th>
-                      <th class="col-data-table-1-6"></th>
-                      <th class="col-data-table-0-7"></th>
-                      <th class="col-data-table-1-8"></th>
-                    </tr>
-                  </tfoot>
                   <tbody>
-                  	<?php if(isset($revenue)){ foreach ($revenue as $row) {
-                  	?>
-                  	<tr>
+                    <?php foreach ($revenue as $row) {
+                    ?>
+                    <tr id="row<?php echo $row['id']?>">
                       <td></td>
                       <td><?php echo $row['id']?></td>
                       <td><?php echo $row['name']?></td>
+                      <td><?php echo $row['get_at'];?></td>
+                      <td><?php echo $row['done_at']?></td>
+                      <td><?php echo $row['status_name']?></td>
+                      
                       <td><?php echo number_format($row['tong_doanhthu'])?></td>
                       <td><?php echo number_format($row['tong_chiphi'])?></td>
                       <td><?php echo $row['created_at']?></td>
@@ -159,12 +113,15 @@
                       <td><?php echo isset($row['ngay_hoan_thanh_don_hang']) ? $row['ngay_hoan_thanh_don_hang'] : '';?></td>
                       <td><?php echo isset($row['note']) ? $row['note'] : '';?></td>
                       <td>
+                      <?php 
+                      if($row['task_status'] != 't003'){ 
+                      ?>
                         <button class="btn btn-primary btn-sm" style="border-radius: 10px;" onclick="updateRevenue('<?php echo $row['id']?>')">Cập nhật doanh thu</button> 
                         <button class="btn btn-success btn-sm" style="border-radius: 10px;" onclick="updateCost('<?php echo $row['id']?>')">Cập nhật chi phí</button>
-                  	  </td>
+                      <?php }?>
+                      </td>
                     </tr>
-                  	<?php
-                  	}} ?>
+                    <?php }?>
                   </tbody>
                 </table>
               </div>
@@ -173,7 +130,7 @@
         </div>
       </div>
     </div>
-  <div class="modal fade" id="update-revenue">
+   <div class="modal fade" id="update-revenue">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -291,57 +248,6 @@ function subUpdateCost(){
     }
   });
 }
-$(document).ready(function() {
-  $('#dropbtn').click(function(event) {
-    var status = $('#statusDrop').val();
-    if (status == 0) {
-      $('.dropdown-content').show();
-      $('#statusDrop').val(1);
-    }else{
-      $('.dropdown-content').hide();
-      $('#statusDrop').val(0);
-    }
-  });
-   var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-var fd = new Date(y, m, 2);
-var ld = new Date(y, m + 1, 1);
-  document.querySelector("#date-from-picker").valueAsDate = fd;
-  document.querySelector("#date-to-picker").valueAsDate = ld;
-});
-
-function acceptNotif(id,group){
-    $.ajax({
-      type:'post',
-      url:"<?php echo base_url(); ?>admin/task/accept_task",
-      data: {
-        'id': id,
-        'group': group,
-      },
-      dataType: 'json',
-      success: function(data){
-        if(data){
-          window.location.reload();
-        }
-      }
-    });
-  }
-  function deniedNotif(id,group){
-    $.ajax({
-      type:'post',
-      url:"<?php echo base_url(); ?>admin/task/denied_task",
-      data: {
-        'id': id,
-        'group': group,
-      },
-      dataType: 'json',
-      success: function(data){
-        if(data){
-         window.location.reload();
-        }
-      }
-    });
-  }
-
 function doneTask(id,group){
     $.ajax({
       type:'post',
@@ -358,4 +264,17 @@ function doneTask(id,group){
       }
     });
   }
+
+$(document).ready(function(){
+  $('#dropbtn').click(function(event) {
+    var status = $('#statusDrop').val();
+    if (status == 0) {
+      $('.dropdown-content').show();
+      $('#statusDrop').val(1);
+    }else{
+      $('.dropdown-content').hide();
+      $('#statusDrop').val(0);
+    }
+  });
+});
 </script>

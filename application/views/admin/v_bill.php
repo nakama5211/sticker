@@ -4,18 +4,11 @@
   else{?> 
 <div class="content-wrapper">
         <div class="page-title">
-          <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Data Table</a></li>
-            </ul>
-          </div>
+          <h3 style="">Quản lý đơn hàng</h3>
           <div>
           <?php 
             $btn = '';
-            $btn.= isset($button['add']) ? '<a class="btn btn-primary btn-primary" onclick="newRow()"><i class="fa fa-lg fa-plus"></i></a> ' : '';
+            $btn.= isset($button['add']) ? '<a class="btn btn-sm btn-primary btn-primary" onclick="newRow()"><i class="fa fa-lg fa-plus"></i></a> ' : '';
             echo $btn;
           ?>
           </div>
@@ -52,7 +45,7 @@
                 <table class="stripe row-border order-column" cellspacing="0" width="100%" id="sampleTable">
                   <thead>
                     <tr class="text-center">
-                      <th></th>
+                      <th class="col-data-table-0-1"></th>
                       <th class="col-data-table-0-2">ID</th>
                       <th class="col-data-table-2">Thông tin khách hàng</th>
                       <th class="col-data-table-1">File thiết kế</th>
@@ -111,29 +104,29 @@
                         switch ($row['status']) {
                           case 'b001':
                             $btn = '';
-                            $btn.= isset($button['confirm']) ? '<button class="btn btn-success btn-lg glyphicon glyphicon-ok" style="border-radius: 10px;" onclick="confirmBill('. $row['id'] .')">
+                            $btn.= isset($button['confirm']) ? '<button class="btn btn-success btn-sm" style="border-radius: 10px;" onclick="confirmBill('. $row['id'] .')">Xác nhận
                               </button> ' : '';
-                            $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
+                            $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-sm" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">Sửa
                               </button> ' : '';
-                            $btn.= isset($button['delete']) ? '<button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="cancelRow('. $row['id'] .')">
+                            $btn.= isset($button['delete']) ? '<button class="btn btn-warning btn-sm " style="border-radius: 10px;" onclick="cancelRow('. $row['id'] .')">Xóa
                               </button> ' : '';
                             echo $btn;
                             break;
                           case 'b002':
                             $btn = '';
-                            $btn.= isset($button['create']) ? '<button class="btn btn-info btn-lg glyphicon glyphicon-hand-right" style="border-radius: 10px;" onclick="checkRow('. $row['id'] .')">
+                            $btn.= isset($button['create']) ? '<button class="btn btn-info btn-sm" style="border-radius: 10px;" onclick="checkRow('. $row['id'] .')">Tạo dự án
                               </button> ' : '';
-                            $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
+                            $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-sm " style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">Sửa
                               </button> ' : '';
-                            $btn.= isset($button['delete']) ? '<button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="cancelRow('. $row['id'] .')">
+                            $btn.= isset($button['delete']) ? '<button class="btn btn-warning btn-sm " style="border-radius: 10px;" onclick="cancelRow('. $row['id'] .')">Xóa
                               </button> ' : '';
                             echo $btn;
                             break;
                           case 'b003':
                             $btn = '';
-                            $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">
+                            $btn.= isset($button['edit']) ? '<button class="btn btn-primary btn-sm" style="border-radius: 10px;" onclick="editRow('. $row['id'] .')">Sửa
                               </button> ' : '';
-                            $btn.= isset($button['upfile']) ? '<button class="btn btn-danger btn-lg glyphicon glyphicon-ok" style="border-radius: 10px;" onclick="selectFile('. $row['id'] .')">
+                            $btn.= isset($button['upfile']) ? '<button class="btn btn-danger btn-sm" style="border-radius: 10px;" onclick="selectFile('. $row['id'] .')">Chọn file
                               </button> ' : '';
                             echo $btn;
                             break;

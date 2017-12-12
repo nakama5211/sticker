@@ -5,16 +5,9 @@ else{
                 ?> 
 <div class="content-wrapper">
         <div class="page-title">
+          <h3>Quản lý trạng thái</h3>
           <div>
-            <h1>Data Table</h1>
-            <ul class="breadcrumb side">
-              <li><i class="fa fa-home fa-lg"></i></li>
-              <li>Tables</li>
-              <li class="active"><a href="#">Data Table</a></li>
-            </ul>
-          </div>
-          <div>
-          <a class="btn btn-primary btn-primary" onclick="addRow()"><i class="fa fa-lg fa-plus"></i></a>
+          <a class="btn btn-sm btn-primary btn-primary" onclick="addRow()"><i class="fa fa-lg fa-plus"></i></a>
           </div>
         </div>
         <?php if($ms=$this->session->userdata('success')){ ?>
@@ -34,7 +27,7 @@ else{
                 <table class="stripe row-border order-column" id="sampleTable">
                   <thead>
                     <tr style="text-align: center;">
-                      <th></th>
+                      <th class="col-data-table-0-1"></th>
                       <th class="col-data-table-0-5">ID</th>
                       <th class="col-data-table-0-8">Loại</th>
                       <th class="col-data-table-1-2">Tên</th>
@@ -54,9 +47,9 @@ else{
                       <td id="created_at<?php echo $row['id']?>"><?php echo $row['created_at']?></td>
                       <td id="updated_at<?php echo $row['id']?>"><?php echo $row['updated_at']?></td>
                       <td>
-                      	<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id']?>')">
+                      	<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick="editRow('<?php echo $row['id']?>')">
                         </button> 
-                        <button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="delRow('<?php echo $row['id']?>')">
+                        <button class="btn btn-warning btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick="delRow('<?php echo $row['id']?>')">
                          </button> 
                   	  </td>
                     </tr>
@@ -119,6 +112,16 @@ else{
 	                 	</div>
 	                 	<div class="help-block" id="error-id"></div>
 	                </div>
+                  <div class="form-group">
+                      <div><b>Tên Loại</b></div>
+                    <div class="input-group">
+                        <div class="input-group-addon iga2">
+                            <span class="fa fa-pencil-square"></span>
+                        </div>
+                      <input type="text" class="form-control" name="type" value="">
+                    </div>
+                    <div class="help-block" id="error-type"></div>
+                  </div>
 	                <div class="form-group">
 	                   	<div><b>Tên trạng thái</b></div>
 	                 	<div class="input-group">
@@ -202,18 +205,23 @@ function subAddForm(){
           $('#error-'+key).html(value);
         }
       }else{
-        var row = [];
-        row.push('');
-        for (let [key, value] of Object.entries(data.response[0])) {
-          row.push('<i id="'+key+data.response[0].id+'">'+value+'</i>');
+        if (data.err) {
+          ssi_modal.notify('error', {content: data.err});
+        }else{
+        window.location.reload();
         }
-        row.push('<button class="btn btn-primary btn-lg fa fa-pencil" style="border-radius: 10px;" onclick="editRow('+data.response[0].id+')"></button> <button class="btn btn-warning btn-lg fa fa-trash" style="border-radius: 10px;" onclick="delRow('+data.response[0].id+')"></button>');
-        $('#add-row').modal('hide');
-        var rowIndex = $('#sampleTable').dataTable().fnAddData(row); 
-        var irow = $('#sampleTable').dataTable().fnGetNodes(rowIndex);
-        $(irow).attr('id', data.response[0].id);
-        if(data.success) ssi_modal.notify('success', {content: 'Thành công!!'});
-        if(data.fail) ssi_modal.notify('error', {content: 'Thất bại!!'});
+        // var row = [];
+        // row.push('');
+        // for (let [key, value] of Object.entries(data.response[0])) {
+        //   row.push('<i id="'+key+data.response[0].id+'">'+value+'</i>');
+        // }
+        // row.push('<button class="btn btn-primary btn-sm fa fa-pencil" style="border-radius: 10px;" onclick="editRow('+data.response[0].id+')"></button> <button class="btn btn-warning btn-sm fa fa-trash" style="border-radius: 10px;" onclick="delRow("'+data.response[0].id+'")"></button>');
+        // $('#add-row').modal('hide');
+        // var rowIndex = $('#sampleTable').dataTable().fnAddData(row); 
+        // var irow = $('#sampleTable').dataTable().fnGetNodes(rowIndex);
+        // $(irow).attr('id', data.response[0].id);
+        // if(data.success) ssi_modal.notify('success', {content: 'Thành công!!'});
+        // if(data.fail) ssi_modal.notify('error', {content: 'Thất bại!!'});
       }
     }
   });  

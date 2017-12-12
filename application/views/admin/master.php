@@ -19,6 +19,7 @@
     <!-- Font-icon css-->
     <link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/customer.css">
     <title>HungMinh Admin</title>
     <script src="<?php echo base_url(); ?>js/jquery-2.1.4.min.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->

@@ -56,9 +56,9 @@ else{
                       <td><?php echo $row['updated_at']?></td>
                       <td>
                   		<?php 
-                        echo '<button class="btn btn-info btn-lg glyphicon glyphicon-hand-right" style="border-radius: 10px;" onclick=""></button>';
-                        echo '<button class="btn btn-primary btn-lg glyphicon glyphicon-edit" style="border-radius: 10px;" onclick=""></button>';
-                        echo '<button class="btn btn-warning btn-lg glyphicon glyphicon-trash" style="border-radius: 10px;" onclick=""></button>';
+                        echo '<button class="btn btn-info btn-sm glyphicon glyphicon-hand-right" style="border-radius: 10px;" onclick=""></button>';
+                        echo '<button class="btn btn-primary btn-sm glyphicon glyphicon-edit" style="border-radius: 10px;" onclick=""></button>';
+                        echo '<button class="btn btn-warning btn-sm glyphicon glyphicon-trash" style="border-radius: 10px;" onclick=""></button>';
                         ?>
                   	  </td>
                     </tr>

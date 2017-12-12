@@ -52,8 +52,8 @@ class M_project extends CI_Model
             status.name as status_name,
         ')
         ->from('project')
-        ->join('status','status.id = project.status')
-        ->join('typeproject','typeproject.id = id_typeproject')
+        ->join('status','status.id = project.status','left')
+        ->join('typeproject','typeproject.id = id_typeproject','left')
         ->join('bill','bill.id = id_bill','left')
         ->join('customer','customer.id = bill.id_customer','left')
         ->join('unit','unit.id = bill.unit','left')
@@ -91,7 +91,7 @@ class M_project extends CI_Model
         return $query->result_array();
     }
 
-     function load_my_task_project_bill($match){
+    function load_my_task_project_bill($match){
         $this->db->select('
             project.*,
 
@@ -181,6 +181,58 @@ class M_project extends CI_Model
         ->order_by('project.created_at','desc');
         $query = $this->db->get();
         return $query->result_array();   
+    }
+
+    function load_my_task_project_revenue($match){
+        $this->db->select('
+            project.id,
+            project.created_at,
+            project.project_name,
+            project.tong_chiphi,
+            project.thongtin_chiphi,
+            project.tong_doanhthu,
+            project.thongtin_doanhthu,
+            project.thongtin_khachhang,
+            project.thongtin_donhang,
+
+            status.name as status_name,
+
+            task.id as id_task,
+            task.status as task_status,
+            task.get_at,
+            task.done_at,
+        ')
+        ->from('project')
+        ->join('task','task.id_project = project.id')
+        ->join('status','status.id = task.status','left')
+        ->where($match)
+        ->order_by('project.created_at','desc');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function load_my_task_project_delivery($match){
+        $this->db->select('
+            project.id,
+            project.created_at,
+            project.project_name,
+            project.thongtin_khachhang,
+            project.thongtin_donhang,
+
+            status.name as status_name,
+
+            task.id as id_task,
+            task.status as task_status,
+            task.get_at,
+            task.done_at,
+        ')
+        ->from('project')
+        ->join('task','task.id_project = project.id')
+        ->join('status','status.id = task.status','left')
+        ->where($match)
+        ->order_by('project.created_at','desc');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     function get_row($match){

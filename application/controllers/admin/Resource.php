@@ -115,17 +115,19 @@ class Resource extends CI_Controller{
         	foreach ($frm as $key => $value){
         		$data['error'][$key] = form_error($key);
         	}
+        }elseif ($this->M_data->record_exists(array('id'=>$frm['id']),'status')) {
+        	$data['err'] = "ĐÃ tồn tại mã trạng thái.";
         }else{
 			$this->M_resource->insert($frm,$table);
 			$res = $this->M_resource->get_last_row($table);
 			unset(
 				$res[0]['description'],
-				$res[0]['hidden']
+				$res[0]['hidden'],
+				$res[0]['class']
 			);
 			$data['response'] = $res;
-			var_dump($res);
 		}
-		//echo json_encode($data);
+		echo json_encode($data);
 	}
 
 	public function del_row(){

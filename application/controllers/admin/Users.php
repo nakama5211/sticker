@@ -23,7 +23,7 @@ class Users extends CI_Controller
         $this->load->helper('string');
         $this->load->helper('My_helper');
         date_default_timezone_set('Asia/Ho_Chi_Minh');
-        $category['category'] = array(
+        $this->category['category'] = array(
             'dashboard'=>array(
                 'name'=>'Bảng tổng quan',
                 'link'=>'admin/view_admin/dashboard',
@@ -411,53 +411,6 @@ class Users extends CI_Controller
     }
 
     public function load_view_for_user_counter($id_user){
-        $category['category'] = array(
-            'bill'=> array(
-                'name'=>'Đơn hàng',
-                'link'=>'admin/view_admin/bill',
-                'icon'=>'fa fa-object-group'
-            ),
-            'project'=> array(
-                'name'=>'Quản lý Dự án',
-                'link'=>'admin/view_admin/project',
-                'icon'=>'fa fa-archive'
-            ),
-            'revenue'=>array(
-                'name'=>'Quản lý Doanh thu',
-                'link'=>'admin/view_admin/revenue',
-                'icon'=>'fa fa-briefcase'
-            ),
-            'material'=>array(
-                'name'=>'Quản lý Giấy',
-                'link'=>'admin/view_admin/material',
-                'icon'=>'fa fa-database'
-            ),
-            'print'=>array(
-                'name'=>'Quản lý In',
-                'link'=>'admin/view_admin/print',
-                'icon'=>'fa fa-print'
-            ),
-            'resource'=>array(
-                'type'=>'tree',
-                'name'=>'Quản lý Dữ liệu',
-                'content'=>array(
-                    'outsouce'=>array(
-                        'name'=>'Gia Công',
-                        'link'=>'admin/view_admin/outsouce'
-                    ),
-                    'status'=>array(
-                        'name'=>'Trạng thái',
-                        'link'=>'admin/view_admin/status'
-                    ),
-                ),
-                'icon'=>'fa fa-table'
-            ),
-            'user'=>array(
-                'name'=>'Quản lý User',
-                'link'=>'admin/view_admin/user',
-                'icon'=>'fa fa-user'
-            ),
-        );
         $match['newtask'] = array(
             'task.hidden'=>0,
             'task.status'=>'t001',
@@ -505,7 +458,7 @@ class Users extends CI_Controller
         }
         $this->_data['html_body'] = $this->load->view('admin/v_task_revenue',$data, TRUE);
         // Load view header        
-        $this->_data['html_header'] = $this->load->view('admin/header', $category, TRUE);
+        $this->_data['html_header'] = $this->load->view('admin/header', $this->category, TRUE);
         // Load  footer       
         $this->_data['html_footer'] = $this->load->view('admin/footer', NULL, TRUE);
         // Load view method_one_view        
@@ -513,53 +466,6 @@ class Users extends CI_Controller
     }
 
     public function load_view_for_user_delivery($id_user){
-        $category['category'] = array(
-            'bill'=> array(
-                'name'=>'Đơn hàng',
-                'link'=>'admin/view_admin/bill',
-                'icon'=>'fa fa-object-group'
-            ),
-            'project'=> array(
-                'name'=>'Quản lý Dự án',
-                'link'=>'admin/view_admin/project',
-                'icon'=>'fa fa-archive'
-            ),
-            'revenue'=>array(
-                'name'=>'Quản lý Doanh thu',
-                'link'=>'admin/view_admin/revenue',
-                'icon'=>'fa fa-briefcase'
-            ),
-            'material'=>array(
-                'name'=>'Quản lý Giấy',
-                'link'=>'admin/view_admin/material',
-                'icon'=>'fa fa-database'
-            ),
-            'print'=>array(
-                'name'=>'Quản lý In',
-                'link'=>'admin/view_admin/print',
-                'icon'=>'fa fa-print'
-            ),
-            'resource'=>array(
-                'type'=>'tree',
-                'name'=>'Quản lý Dữ liệu',
-                'content'=>array(
-                    'outsouce'=>array(
-                        'name'=>'Gia Công',
-                        'link'=>'admin/view_admin/outsouce'
-                    ),
-                    'status'=>array(
-                        'name'=>'Trạng thái',
-                        'link'=>'admin/view_admin/status'
-                    ),
-                ),
-                'icon'=>'fa fa-table'
-            ),
-            'user'=>array(
-                'name'=>'Quản lý User',
-                'link'=>'admin/view_admin/user',
-                'icon'=>'fa fa-user'
-            ),
-        );
         $match['newtask'] = array(
             'task.hidden'=>0,
             'task.status'=>'t001',
@@ -601,7 +507,7 @@ class Users extends CI_Controller
         }
         $this->_data['html_body'] = $this->load->view('admin/v_task_delivery',$data, TRUE);
         // Load view header        
-        $this->_data['html_header'] = $this->load->view('admin/header', $category, TRUE);
+        $this->_data['html_header'] = $this->load->view('admin/header', $this->category, TRUE);
         // Load  footer       
         $this->_data['html_footer'] = $this->load->view('admin/footer', NULL, TRUE);
         // Load view method_one_view        

@@ -226,7 +226,7 @@ class Users extends CI_Controller
                 $this->load_view_for_user_delivery($id_user);
                 break;
             default:
-                # code...
+                redirect(base_url().'admin/admin/view_admin/');
                 break;
         }
     }
@@ -296,7 +296,7 @@ class Users extends CI_Controller
             'task.status!='=>'t001',
         );
         $category['active']['user'] = 'active';
-        $data['newtask'] = $this->M_task->load_data($match['newtask']);
+        // $data['newtask'] = $this->M_task->load_data($match['newtask']);
         $data['oldtask'] = $this->M_task->load_data($match['oldtask']);
         $data['print'] = $this->M_printer->load_data_for_task_printer($match['printer']);
         for($i=0;$i<count($data['print']);$i++){
@@ -440,7 +440,7 @@ class Users extends CI_Controller
             'task.status!='=>'t001',
         );
         $category['active']['user'] = 'active';
-        $data['newtask'] = $this->M_task->load_data($match['newtask']);
+        // $data['newtask'] = $this->M_task->load_data($match['newtask']);
         $data['oldtask'] = $this->M_task->load_data($match['oldtask']);
         $data['project'] = $this->M_project->load_my_task_project_bill($match['project']);
         $this->_data['html_body'] = $this->load->view('admin/v_task_design',$data, TRUE);
@@ -518,7 +518,7 @@ class Users extends CI_Controller
         );
         $category['active']['user'] = 'active';
         $data['department'] = $this->M_department->load_all_department();
-        $data['newtask'] = $this->M_task->load_data($match['newtask']);
+        // $data['newtask'] = $this->M_task->load_data($match['newtask']);
         $data['oldtask'] = $this->M_task->load_data($match['oldtask']);
         $data['revenue'] = [];
         $revenue = $this->M_project->load_my_task_project_revenue($match['project']);
@@ -620,7 +620,7 @@ class Users extends CI_Controller
         );
         $category['active']['user'] = 'active';
         $data['department'] = $this->M_department->load_all_department();
-        $data['newtask'] = $this->M_task->load_data($match['newtask']);
+        // $data['newtask'] = $this->M_task->load_data($match['newtask']);
         $data['oldtask'] = $this->M_task->load_data($match['oldtask']);
         $data['project'] = [];
         $project = $this->M_project->load_my_task_project_delivery($match['project']);

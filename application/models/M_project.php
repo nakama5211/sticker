@@ -242,5 +242,11 @@ class M_project extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+    function thongke_theothang()
+    {
+        $sql = "Select Month(created_at) as 'thang', Sum(tong_doanhthu) as 'doanh thu', Sum(tong_chiphi) as 'chi phi' From project Group by Month(created_at)";
+        $query = $this->db->query($sql); 
+        return $query->result_array();
+    }
 }
 

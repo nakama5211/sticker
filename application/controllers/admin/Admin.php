@@ -132,6 +132,18 @@ class Admin extends CI_Controller{
 		            ); 
 					switch ($view) {
 						case 'dashboard':
+							$doanhthu = array(null,null,null,null,null,null,null,null,null,null,null,null);
+							$chiphi = array(null,null,null,null,null,null,null,null,null,null,null,null);
+					        $loinhuan = array(null,null,null,null,null,null,null,null,null,null,null,null);
+					        $thongke = $this->M_project->thongke_theothang();
+					        for ($i=0; $i < count($thongke) ; $i++) { 
+					            $doanhthu[$thongke[$i]['thang']-1] = $thongke[$i]['doanh thu'] - 0;
+					            $chiphi[$thongke[$i]['thang']-1] = $thongke[$i]['chi phi'] - 0;
+					            $loinhuan[$thongke[$i]['thang']-1] = $thongke[$i]['doanh thu'] - $thongke[$i]['chi phi'];
+					        }
+					        $data['doanhthu'] = json_encode($doanhthu);
+					        $data['chiphi'] = json_encode($chiphi);
+					        $data['loinhuan'] = json_encode($loinhuan);
 							$this->_data['html_body'] = $this->load->view('admin/v_dashboard',$data, TRUE);
 							break;
 						case 'bill':

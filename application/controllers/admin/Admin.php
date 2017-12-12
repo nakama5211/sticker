@@ -28,7 +28,7 @@ class Admin extends CI_Controller{
     }
 	function index(){
 		if($this->session->userdata('user_id')){
-			redirect(base_url().'admin/admin/view_admin/bill');
+			redirect(base_url().'admin/admin/view_admin/');
 		}else{
 			$data['csrf'] = array(
 	        'name' => $this->security->get_csrf_token_name(),

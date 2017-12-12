@@ -79,6 +79,11 @@ class Admin extends CI_Controller{
 			switch ($this->session->userdata('group')){
 				case'1':{
 		            $category['category'] = array(
+		            	'dashboard'=>array(
+		            		'name'=>'Quản lý User',
+		            		'link'=>'admin/view_admin/dashboard',
+		            		'icon'=>'fa fa-tachometer'
+		            	),
 		            	'bill'=> array(
 		            		'name'=>'Đơn hàng',
 		            		'link'=>'admin/view_admin/bill',
@@ -126,6 +131,9 @@ class Admin extends CI_Controller{
 		            	),
 		            ); 
 					switch ($view) {
+						case 'bill':
+							$this->_data['html_body'] = $this->load->view('admin/v_dashboard',$data, TRUE);
+							break;
 						case 'bill':
 							$match = array(
 								'bill.hidden'=>0,

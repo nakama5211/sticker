@@ -131,7 +131,7 @@ class Admin extends CI_Controller{
 		            	),
 		            ); 
 					switch ($view) {
-						case 'bill':
+						case 'dashboard':
 							$this->_data['html_body'] = $this->load->view('admin/v_dashboard',$data, TRUE);
 							break;
 						case 'bill':

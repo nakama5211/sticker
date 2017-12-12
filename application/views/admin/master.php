@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/customer.css">
     <title>HungMinh Admin</title>
     <script src="<?php echo base_url(); ?>js/jquery-2.1.4.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
     <!--if lt IE 9
     script(src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js')

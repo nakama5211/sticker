@@ -80,7 +80,7 @@ class Admin extends CI_Controller{
 				case'1':{
 		            $category['category'] = array(
 		            	'dashboard'=>array(
-		            		'name'=>'Quản lý User',
+		            		'name'=>'Bảng tổng quan',
 		            		'link'=>'admin/view_admin/dashboard',
 		            		'icon'=>'fa fa-tachometer'
 		            	),
